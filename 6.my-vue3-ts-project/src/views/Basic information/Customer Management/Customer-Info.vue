@@ -56,52 +56,53 @@
         </div>
         <!-- 查看配送地址 -->
         <el-dialog v-model="showDialog" title="查看配送地址" width="500">
-            <el-divider />
-            <div class="harvestinformation">
-                <span class="span1">| </span>
-                <span>收货信息1</span>
-            </div>
-            <div class="Receivingaddress">
-                <span>配送收货地址名称：{{}}</span>
-            </div>
-            <div class="Contact">
-                <span>联系人：{{}}</span>
-            </div>
-            <div class="Contactnumber">
-                <span>联系电话：{{}}</span>
-            </div>
-            <div class="Location">
-                <span>所在地区：{{}}</span>
-            </div>
-            <div class="detailedaddress">
-                <span>详细地址：{{}}</span>
-            </div>
-            <div class="harvestinformation">
-                <span class="span1">| </span>
-                <span>收货信息2</span>
-            </div>
-            <div class="Receivingaddress">
-                <span>配送收货地址名称：{{}}</span>
-            </div>
-            <div class="Contact">
-                <span>联系人：{{}}</span>
-            </div>
-            <div class="Contactnumber">
-                <span>联系电话：{{}}</span>
-            </div>
-            <div class="Location">
-                <span>所在地区：{{}}</span>
-            </div>
-            <div class="detailedaddress">
-                <span>详细地址：{{}}</span>
-            </div>
-            <template #footer>
-                <div class="dialog-footer">
+           <el-from>
+               <el-divider />
+                <div class="harvestinformation">
+                    <span class="span1">| </span>
+                    <span>收货信息1</span>
+                </div>
+                <div class="Receivingaddress">
+                    <span>配送收货地址名称：{{}}</span>
+                </div>
+                <div class="Contact">
+                    <span>联系人：{{}}</span>
+                </div>
+                <div class="Contactnumber">
+                    <span>联系电话：{{}}</span>
+                </div>
+                <div class="Location">
+                    <span>所在地区：{{}}</span>
+                </div>
+                <div class="detailedaddress">
+                    <span>详细地址：{{}}</span>
+                </div>
+                <div class="harvestinformation">
+                    <span class="span1">| </span>
+                    <span>收货信息2</span>
+                </div>
+                <div class="Receivingaddress">
+                    <span>配送收货地址名称：{{}}</span>
+                </div>
+                <div class="Contact">
+                    <span>联系人：{{}}</span>
+                </div>
+                <div class="Contactnumber">
+                    <span>联系电话：{{}}</span>
+                </div>
+                <div class="Location">
+                    <span>所在地区：{{}}</span>
+                </div>
+                <div class="detailedaddress">
+                    <span>详细地址：{{}}</span>
+                </div>
+               <el-divider />
+                <el-row type="flex" justify="end" align="middle">
                     <el-button @click="showDialog = false">
                         关闭
                     </el-button>
-                </div>
-            </template>
+               </el-row>
+            </el-from>
         </el-dialog>
     </div>
     <!-- 添加客户 -->
