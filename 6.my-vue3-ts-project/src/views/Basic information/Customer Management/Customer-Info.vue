@@ -56,7 +56,7 @@
         </div>
         <!-- 查看配送地址 -->
         <el-dialog v-model="showDialog" title="查看配送地址" width="500">
-           <el-from>
+           <el-form>
                <el-divider />
                 <div class="harvestinformation">
                     <span class="span1">| </span>
@@ -102,7 +102,7 @@
                         关闭
                     </el-button>
                </el-row>
-            </el-from>
+           </el-form>
         </el-dialog>
     </div>
     <!-- 添加客户 -->
