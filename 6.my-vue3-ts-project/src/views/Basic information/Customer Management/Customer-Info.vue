@@ -112,6 +112,7 @@
 
 <script setup lang="ts" name="Customer-Info">
 import AddCustomer from './components/Add-customer.vue'
+
 import { reactive, ref } from 'vue';
 const formInline = reactive({
   user: '',
