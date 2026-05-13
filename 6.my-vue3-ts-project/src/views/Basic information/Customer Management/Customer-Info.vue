@@ -46,8 +46,8 @@
                 <el-table-column prop="name" label="客户名称/姓名" width="160" />
                 <el-table-column prop="remark" label="备注" width="180" show-overflow-tooltip />
                 <el-table-column prop="address" label="操作" width="250">
-                    <el-button type="text" size="small" @click="Viewaddress">查看配送地址</el-button>
-                    <el-button type="text" size="small" @click="Edit">编辑</el-button>
+                   <el-button link type="primary" size="small" @click="Viewaddress">查看配送地址</el-button>
+                    <el-button link type="primary" size="small" @click="Edit">编辑</el-button>
                 </el-table-column>
             </el-table>
             <el-row type="flex" justify="end" align="middle">
@@ -105,7 +105,7 @@
         </el-dialog>
     </div>
     <!-- 添加客户 -->
-    <Add-customer ref="subinstance"/>
+   <Add-customer ref="subinstance" />
 </template>
 
 
