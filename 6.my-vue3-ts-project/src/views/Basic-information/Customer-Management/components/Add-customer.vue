@@ -239,15 +239,15 @@ const btnOk = async () => {
         await Promise.all(validations)
         if (formList1.id !== 0) { 
         const editData = JSON.parse(JSON.stringify(formList1))
-            emit('editCustomer', editData)
-            ElMessage.success('编辑成功')
+        emit('editCustomer', editData)
+        ElMessage.success('编辑成功')
         } else {
         const newData = JSON.parse(JSON.stringify(formList1))
         newData.id = nextId1++   
         newData.coding = coding++ 
-          emit('addCustomer',newData)
-            console.log(formList1);
-            ElMessage.success('添加成功')
+        emit('addCustomer',newData)
+            // console.log(formList1);
+        ElMessage.success('添加成功')
         }
         formOne.value?.resetFields()
         addressForm.value.forEach(form => form?.resetFields())

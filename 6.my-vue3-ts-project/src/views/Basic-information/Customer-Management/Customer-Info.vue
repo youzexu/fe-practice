@@ -47,8 +47,8 @@
                 <el-table-column prop="remark" label="备注" width="180" show-overflow-tooltip />
                 <el-table-column prop="address" label="操作" width="250">
                    <template v-slot="{ row }">
-                       <el-button link type="primary" size="small" @click="viewAddress">查看配送地址</el-button>
-                       <el-button link type="primary" size="small" @click="Edit(row)">编辑</el-button>
+                       <el-button link type="primary" size="small" @click="viewAddress(row)">查看配送地址</el-button>
+                        <el-button link type="primary" size="small" @click="Edit(row)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -57,54 +57,35 @@
             </el-row>
         </div>
         <!-- 查看配送地址 -->
-        <el-dialog v-model="showDialog" title="查看配送地址" width="500">
-           <el-form :model="deliveryForm">
-                <el-divider />
+       <el-dialog v-model="showDialog" title="查看配送地址" width="500">
+           <el-divider />
+           <div v-for="(value, index) in currentAddresses" :key="value.id">
                 <div class="harvestinformation">
                     <span class="span1">| </span>
-                    <span>收货信息1</span>
+                    <span>收货信息{{index}}</span>
                 </div>
                 <div class="Receivingaddress">
-                   <span>配送收货地址名称：{{ deliveryForm.address }}</span>
+                   <span>配送收货地址名称：{{ value.address }}</span>
                 </div>
                 <div class="Contact">
-                   <span>联系人：{{ deliveryForm.contact }}</span>
+                   <span>联系人：{{ value.contact }}</span>
                 </div>
                 <div class="Contactnumber">
-                   <span>联系电话：{{ deliveryForm.phone }}</span>
+                   <span>联系电话：{{ value.phone }}</span>
                 </div>
                 <div class="Location">
-                   <span>所在地区：{{ deliveryForm.region }}</span>
+                   <span>所在地区：{{ value.region }}</span>
                 </div>
                 <div class="detailedaddress">
-                   <span>详细地址：{{ deliveryForm.detailedaddress }}</span>
+                   <span>详细地址：{{ value.detailedAddress }}</span>
                 </div>
-                <div class="harvestinformation">
-                    <span class="span1">| </span>
-                    <span>收货信息2</span>
-                </div>
-                <div class="Receivingaddress">
-                   <span>配送收货地址名称：{{ deliveryForm.address1 }}</span>
-                </div>
-                <div class="Contact">
-                   <span>联系人：{{ deliveryForm.contact1 }}</span>
-                </div>
-                <div class="Contactnumber">
-                   <span>联系电话：{{ deliveryForm.phone1 }}</span>
-                </div>
-                <div class="Location">
-                   <span>所在地区：{{ deliveryForm.region1 }}</span>
-                </div>
-                <div class="detailedaddress">
-                   <span>详细地址：{{ deliveryForm.detailedaddress1 }}</span>
-                </div>
-               <el-divider />
-                <el-row type="flex" justify="end" align="middle">
-                    <el-button @click="showDialog = false">
-                        关闭
-                    </el-button>
-               </el-row>
-           </el-form>
+           </div>
+            <el-divider />
+            <el-row type="flex" justify="end" align="middle">
+                <el-button @click="showDialog = false">
+                    关闭
+                </el-button>
+            </el-row>
         </el-dialog>
     </div>
     <!-- 添加客户 -->
@@ -117,7 +98,7 @@
 
 import AddCustomer from './components/Add-customer.vue'
 import { reactive, ref } from 'vue';
-// 地址接口放在客户接口内部
+// 规范化数据接口
 interface customerData1 {
     id: number
     coding:number
@@ -137,6 +118,7 @@ interface customerData1 {
         detailedAddress: string
     }[]
 }
+// 定义查询数据
 const formInline = reactive({
   user: '',
   user1: '',
@@ -145,25 +127,18 @@ const formInline = reactive({
   region2: '',
   date: '',
 })
-const deliveryForm = reactive({
-    address: '美团一仓',
-    contact: '杨丽',
-    phone: '13251175885',
-    region: '重庆市 市辖区 渝北区',
-    detailedaddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼',
-    address1: '美团二仓',
-    contact1: '嘉豪',
-    phone1: '1532478232',
-    region1: '重庆市 市辖区 渝北区',
-    detailedaddress1: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-})
+// 定义表格数据
+const currentAddresses = ref<{
+    id: number;
+    address: string;
+    contact: string;
+    phone: string;
+    region: string;
+    detailedAddress: string
+}[]>([])
 const showDialog = ref( false)
 const subinStance = ref()
-
-const addCustomer = () => {
-
-    subinStance.value.open()
-}
+// 重置查询表单
 const onSubmit = () => {
     Object.assign(formInline, {
         user: '',
@@ -174,18 +149,30 @@ const onSubmit = () => {
         date: ''
     })
 }
-const viewAddress = () => {
+// 打开查询地址表单
+const viewAddress = (row:customerData1) => {
+    currentAddresses.value = row.addresses
     showDialog.value = true
 }
+// 调用子组件新增
+const addCustomer = () => {
+    subinStance.value.open()
+}
+// 子组件编辑
 const Edit = (row:customerData1) => {
     subinStance.value.openEdit(row)
 }
+// 新增
 const handleAddData = (data: customerData1) => {
     console.log(data);
     tableData.value.unshift(data)
 }
-// 新增编辑数据处理函数
+// 编辑
 const handleEditData = (data: customerData1) => {
+    const index = tableData.value.findIndex(item => item.id === data.id)
+    if (index !== -1) {
+        tableData.value[index] = { ...tableData.value[index], ...data }
+    }
     console.log(data);
 }
 const tableData = ref( [
@@ -272,7 +259,8 @@ const tableData = ref( [
     remark: '备注',
     type: '个人',
     organization: '上海分公司',
-    abbreviation: '加号团建',        addresses: [
+        abbreviation: '加号团建',
+        addresses: [
             {
                 address: '美团七仓',
                 contact: '杨丽',
