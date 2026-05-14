@@ -5,20 +5,23 @@
                 ref="formOne" :rules="rules">
                 <el-form-item label="客户属性" style="width: 100%;margin-bottom: 24px;" size="small" prop="attribute">
                     <el-select placeholder="请选择" v-model="formList1.attribute">
-                        <el-option label="个人" value="个人"></el-option>
-                        <el-option label="企业" value="企业"></el-option>
+                       <el-option label="外部" value="外部"></el-option>
+                        <el-option label="内部" value="内部"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="客户类型" style="width: 100%;margin-bottom: 24px;" size="small" prop="type">
                     <el-select placeholder="请选择" v-model="formList1.type">
-                        <el-option label="潜在客户" value="潜在客户"></el-option>
-                        <el-option label="正式客户" value="正式客户"></el-option>
+                       <el-option label="企业" value="企业"></el-option>
+                        <el-option label="个人" value="个人"></el-option>
+                        <el-option label="其他" value="其他"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="客户分组" style="width: 100%; margin-bottom: 24px;" size="small" prop="group">
                     <el-select placeholder="请选择" v-model="formList1.group">
-                        <el-option label="分组1" value="分组1"></el-option>
-                        <el-option label="分组2" value="分组2"></el-option>
+                       <el-option label="商超" value="商超"></el-option>
+                        <el-option label="社群" value="社群"></el-option>
+                        <el-option label="上群" value="上群"></el-option>
+                        <el-option label="团建" value="团建"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="客户所属组织" style="width: 100%;margin-bottom: 24px;" size="small" prop="organization">
@@ -92,8 +95,7 @@
 import { ref, reactive, computed, } from 'vue';
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
-
-
+// 规范数据
 interface customerData {
     id: number
     coding: number
@@ -113,9 +115,11 @@ interface customerData {
         detailedAddress: string
     }[]
 }
+// 全局变量
 let nextId1 = 2103972301206
 let coding = 40999999917
 let nextId = 1
+// 组件数据
 const formList1 = reactive<customerData>({
     id:0,
     attribute: '',
@@ -137,6 +141,7 @@ const formList1 = reactive<customerData>({
         }
     ] 
 })
+// 添加地址表单
 const addForm = () => {   
     formList1.addresses.push({
         id: nextId++,
@@ -147,14 +152,14 @@ const addForm = () => {
         detailedAddress: ''
     })
 }
+// 弹窗状态
 const dialogVisible = ref(false);
 // 备份数据（用于取消时恢复）
 let backupFormData: customerData | null = null
-
 const backupData = () => {
     backupFormData = JSON.parse(JSON.stringify(formList1))
 }
-
+// 恢复数据
 const restoreBackup = () => {
     if (backupFormData) {
         Object.assign(formList1, backupFormData)
@@ -166,15 +171,17 @@ const restoreBackup = () => {
         }
     }
 }
+// 打开新增弹窗
 const open = () => {
     backupFormData = null 
     dialogVisible.value = true;
     clearForm()
 }
-
+// 动态弹窗标题
 const showTitle = computed(() => {
     return formList1.id === 0 ? '新增客户' : '编辑客户'
- })
+})
+ // 清空表单方法
 const clearForm = () => {
     formList1.id = 0
     formList1.attribute = ''
@@ -194,7 +201,7 @@ const clearForm = () => {
             detailedAddress: ''
         }]
 }
-
+// 打开编辑弹窗
 const openEdit = (data: customerData) => {
     Object.assign(formList1, {
         id: data.id || 0,
@@ -224,12 +231,16 @@ const openEdit = (data: customerData) => {
     dialogVisible.value = true
     backupFormData = null 
 }
+// 表单验证规则
 const formOne = ref()
+// 地址表单验证规则
 const addressForm = ref<FormInstance[]>([])
+// 自定义添加编辑事件
 const emit = defineEmits<{
-    (e: 'addCustomer', data: customerData): void
+     (e: 'addCustomer', data: customerData): void
      (e: 'editCustomer', data: customerData): void
 }>()
+// 确定按钮事件
 const btnOk = async () => {
     try {
         const validations = [
@@ -257,6 +268,7 @@ const btnOk = async () => {
         ElMessage.error('请填写完整信息')
     }
 }
+// 取消按钮事件
 const btnCancel = () => {
     if (formList1.id !== 0) {
         restoreBackup()
@@ -268,6 +280,7 @@ const btnCancel = () => {
     }
     dialogVisible.value = false
 }
+// 表单验证规则
 const rules = reactive({
     attribute: [
         { required: true, message: '请选择客户属性', trigger: 'blur' }

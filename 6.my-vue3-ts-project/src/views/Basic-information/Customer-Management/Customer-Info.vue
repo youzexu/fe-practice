@@ -2,34 +2,37 @@
     <div class="customer-info">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
             <el-form-item label="客户属性：">
-                <el-select v-model="formInline.region" placeholder="请选择客户属性" clearable style="width: 299px;">
-                    <el-option label="Zone one" value="shanghai" />
-                    <el-option label="Zone two" value="beijing" />
+               <el-select v-model="formInline.attribute" placeholder="请选择客户属性" clearable style="width: 299px;">
+                    <el-option label="外部" value="外部" />
+                    <el-option label="内部" value="内部" />
                 </el-select>
             </el-form-item>
             <el-form-item label="客户类型：">
-                <el-select v-model="formInline.region1" placeholder="请选择客户类型" clearable style="width: 299px;">
-                    <el-option label="Zone one" value="shanghai" />
-                    <el-option label="Zone two" value="beijing" />
+               <el-select v-model="formInline.type" placeholder="请选择客户类型" clearable style="width: 299px;">
+                    <el-option label="企业" value="企业" />
+                    <el-option label="个人" value="个人" />
+                    <el-option label="其他" value="其他" />
                 </el-select>
             </el-form-item>
             <el-form-item label="客户分组：">
-                <el-select v-model="formInline.region2" placeholder="请选择客户分组" clearable style="width: 299px;">
-                    <el-option label="Zone one" value="shanghai" />
-                    <el-option label="Zone two" value="beijing" />
+               <el-select v-model="formInline.group" placeholder="请选择客户分组" clearable style="width: 299px;">
+                    <el-option label="商超" value="商超" />
+                    <el-option label="社群" value="社群" />
+                    <el-option label="上群" value="上群" />
+                    <el-option label="团建" value="团建" />
                 </el-select>
             </el-form-item>
             <el-form-item label="客户名称/姓名：">
-                <el-input v-model="formInline.user" placeholder="请输入" clearable style="width: 263px;" />
+               <el-input v-model="formInline.name" placeholder="请输入" clearable style="width: 263px;" />
             </el-form-item>
             <el-form-item label="客户简称/别名：">
-                <el-input v-model="formInline.user1" placeholder="请输入" clearable style="width: 263px;" />
+               <el-input v-model="formInline.abbreviation" placeholder="请输入" clearable style="width: 263px;" />
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onSubmit">查询</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button @click="onSubmit">重置</el-button>
+               <el-button @click="reset">重置</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -52,6 +55,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+           <!-- 分页 -->
             <el-row type="flex" justify="end" align="middle">
                 <el-pagination size="small" background layout="prev, pager, next" :total="50" class="mt-4" />
             </el-row>
@@ -62,7 +66,7 @@
            <div v-for="(value, index) in currentAddresses" :key="value.id">
                 <div class="harvestinformation">
                     <span class="span1">| </span>
-                    <span>收货信息{{index}}</span>
+                   <span>收货信息{{ index + 1 }}</span>
                 </div>
                 <div class="Receivingaddress">
                    <span>配送收货地址名称：{{ value.address }}</span>
@@ -118,63 +122,8 @@ interface customerData1 {
         detailedAddress: string
     }[]
 }
-// 定义查询数据
-const formInline = reactive({
-  user: '',
-  user1: '',
-  region: '',
-  region1: '',
-  region2: '',
-  date: '',
-})
+// 规范表格数据
 // 定义表格数据
-const currentAddresses = ref<{
-    id: number;
-    address: string;
-    contact: string;
-    phone: string;
-    region: string;
-    detailedAddress: string
-}[]>([])
-const showDialog = ref( false)
-const subinStance = ref()
-// 重置查询表单
-const onSubmit = () => {
-    Object.assign(formInline, {
-        user: '',
-        user1: '',
-        region: '',
-        region1: '',
-        region2: '',
-        date: ''
-    })
-}
-// 打开查询地址表单
-const viewAddress = (row:customerData1) => {
-    currentAddresses.value = row.addresses
-    showDialog.value = true
-}
-// 调用子组件新增
-const addCustomer = () => {
-    subinStance.value.open()
-}
-// 子组件编辑
-const Edit = (row:customerData1) => {
-    subinStance.value.openEdit(row)
-}
-// 新增
-const handleAddData = (data: customerData1) => {
-    console.log(data);
-    tableData.value.unshift(data)
-}
-// 编辑
-const handleEditData = (data: customerData1) => {
-    const index = tableData.value.findIndex(item => item.id === data.id)
-    if (index !== -1) {
-        tableData.value[index] = { ...tableData.value[index], ...data }
-    }
-    console.log(data);
-}
 const tableData = ref( [
     {
     id:2103972301201,
@@ -187,14 +136,16 @@ const tableData = ref( [
     organization: '北京分公司',
     abbreviation: '加剋夫',
             addresses: [
-            {
+                {
+                id:2103972001,
                 address: '美团一仓',
                 contact: '杨丽',
                 phone: '13251175885',
                 region: '重庆市 市辖区 渝北区',
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
-            {
+                {
+                 id:2103972002,
                 address: '美团二仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -214,7 +165,8 @@ const tableData = ref( [
         organization: '重庆分公司',
         abbreviation: '好又多',
              addresses: [
-            {
+                 {
+                 id:2103972003,
                 address: '美团三仓',
                 contact: '帅哥',
                 phone: '13251175885',
@@ -234,14 +186,16 @@ const tableData = ref( [
     organization: '四川分公司',
         abbreviation: '中百大潮',
             addresses: [
-            {
+                {
+                 id:2103972004,
                 address: '美团五仓',
                 contact: '杨丽',
                 phone: '13251175885',
                 region: '重庆市 市辖区 渝北区',
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
-            {
+                {
+                 id:2103972005,
                 address: '美团六仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -262,6 +216,7 @@ const tableData = ref( [
         abbreviation: '加号团建',
         addresses: [
             {
+                 id:2103972006,
                 address: '美团七仓',
                 contact: '杨丽',
                 phone: '13251175885',
@@ -269,6 +224,7 @@ const tableData = ref( [
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
             {
+                 id:2103972007,
                 address: '美团八仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -288,14 +244,16 @@ const tableData = ref( [
     organization: '南京分公司',
         abbreviation: '中百大潮',
              addresses: [
-            {
+                 {
+                 id:2103972008,
                 address: '美团九仓',
                 contact: '杨丽',
                 phone: '13251175885',
                 region: '重庆市 市辖区 渝北区',
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
-            {
+                 {
+                 id:2103972009,
                 address: '美团十仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -315,14 +273,16 @@ const tableData = ref( [
     organization: '河北分公司',
         abbreviation: '中百大潮',
              addresses: [
-            {
+                 {
+                 id:2103972010,
                 address: '美团十一仓',
                 contact: '杨丽',
                 phone: '13251175885',
                 region: '重庆市 市辖区 渝北区',
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
-            {
+                 {
+                 id:2103972011,
                 address: '美团十二仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -332,8 +292,78 @@ const tableData = ref( [
         ]
   },
 ])
-
-
+// 定义查询数据
+const formInline = reactive({
+  attribute: '',
+  type: '',
+  group: '',
+  name: '',
+  abbreviation: '',
+})
+// 定义表格数据
+const currentAddresses = ref<{
+    id: number;
+    address: string;
+    contact: string;
+    phone: string;
+    region: string;
+    detailedAddress: string
+}[]>([])
+// 定义弹窗
+const showDialog = ref(false)
+// 定义子组件
+const subinStance = ref()
+// 重置表单
+const reset = () => { 
+    Object.assign(formInline, {
+    attribute: '',
+    type: '',
+    group: '',
+    name: '',
+    abbreviation: '',
+    })
+    tableData.value = [...originTableData.value]
+}
+// 打开查询地址表单
+const viewAddress = (row:customerData1) => {
+    currentAddresses.value = row.addresses
+    showDialog.value = true
+}
+// 调用子组件新增
+const addCustomer = () => {
+    subinStance.value.open()
+}
+// 子组件编辑
+const Edit = (row:customerData1) => {
+    subinStance.value.openEdit(row)
+}
+// 新增
+const handleAddData = (data: customerData1) => {
+    console.log(data);
+    tableData.value.unshift(data)
+    originTableData.value.unshift(data)
+}
+// 保存原始数据
+const originTableData = ref<customerData1[]>([...tableData.value])
+// 查询表单
+const onSubmit = () => {
+  tableData.value = originTableData.value.filter(item => {
+    if (formInline.attribute && item.attribute !== formInline.attribute) return false
+    if (formInline.type && item.type !== formInline.type) return false
+    if (formInline.group && item.group !== formInline.group) return false
+    if (formInline.name && !item.name.includes(formInline.name)) return false
+    if (formInline.abbreviation && !item.abbreviation.includes(formInline.abbreviation)) return false
+    return true
+  })
+}
+// 编辑
+const handleEditData = (data: customerData1) => {
+    const index = tableData.value.findIndex(item => item.id === data.id)
+    if (index !== -1) {
+        tableData.value[index] = { ...tableData.value[index], ...data }
+    }
+    console.log(data);
+}
 </script>
 
 <style scoped>
