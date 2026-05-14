@@ -108,23 +108,34 @@
         </el-dialog>
     </div>
     <!-- 添加客户 -->
-   <Add-customer ref="subinStance" :id="editId" @update:id="editId = $event" />
+   <Add-customer ref="subinStance" @addCustomer="handleAddData" @editCustomer="handleEditData" />
 </template>
 
 
 <script setup lang="ts" name="Customer-Info">
 
-import AddCustomer from './components/Add-customer.vue'
 
+import AddCustomer from './components/Add-customer.vue'
 import { reactive, ref } from 'vue';
-interface CustomerData {
+// 地址接口放在客户接口内部
+interface customerData1 {
     id: number
-    coding: string
+    coding:number
     attribute: string
     type: string
-    grouping: string
+    group: string
     name: string
     remark: string
+    organization: string
+    abbreviation: string
+    addresses: {
+        id: number
+        address: string
+        contact: string
+        phone: string
+        region: string
+        detailedAddress: string
+    }[]
 }
 const formInline = reactive({
   user: '',
@@ -148,9 +159,9 @@ const deliveryForm = reactive({
 })
 const showDialog = ref( false)
 const subinStance = ref()
-const editId = ref(0)
+
 const addCustomer = () => {
-    editId.value = 0 
+
     subinStance.value.open()
 }
 const onSubmit = () => {
@@ -164,23 +175,29 @@ const onSubmit = () => {
     })
 }
 const viewAddress = () => {
-    editId.value = 0 
     showDialog.value = true
 }
-const Edit = (row:CustomerData) => {
-    editId.value = row.id
+const Edit = (row:customerData1) => {
     subinStance.value.openEdit(row)
 }
-const tableData = [
+const handleAddData = (data: customerData1) => {
+    console.log(data);
+    tableData.value.unshift(data)
+}
+// 新增编辑数据处理函数
+const handleEditData = (data: customerData1) => {
+    console.log(data);
+}
+const tableData = ref( [
     {
     id:2103972301201,
-    coding: '40999999911',
+    coding: 40999999911,
     attribute: '外部',
     group: '商超',
     name: '加剋夫',
     remark: '我带我活动i啊我都i啊我活动kkkk',
     type: '个人',
-        organization: '北京分公司',
+    organization: '北京分公司',
     abbreviation: '加剋夫',
             addresses: [
             {
@@ -201,7 +218,7 @@ const tableData = [
   },
     {
     id:2103972301202,
-    coding: '40999999912',
+    coding: 40999999912,
     attribute: '外部',
     group: '上群',
     name: '好又多',
@@ -221,7 +238,7 @@ const tableData = [
   },
     {
     id:2103972301203,
-    coding: '40999999913',
+    coding: 40999999913,
     attribute: '内部',
     group: '社群',
     name: '中百大潮',
@@ -248,7 +265,7 @@ const tableData = [
   },
     {
     id:2103972301204,
-    coding: '40999999914',
+    coding: 40999999914,
     attribute: '内部',
     group: '团建',
     name: '加号团建',
@@ -274,7 +291,7 @@ const tableData = [
   },
     {
     id:2103972301205,
-    coding: '40999999915',
+    coding: 40999999915,
     attribute: '内部',
     group: '社群',
     name: '重庆批发',
@@ -301,7 +318,7 @@ const tableData = [
   },
     {
     id: 2103972301206,
-    coding: '40999999915',
+    coding: 40999999916,
     attribute: '内部',
     group: '社群',
     name: '重庆批发',
@@ -326,7 +343,7 @@ const tableData = [
             }
         ]
   },
-]
+])
 
 
 </script>

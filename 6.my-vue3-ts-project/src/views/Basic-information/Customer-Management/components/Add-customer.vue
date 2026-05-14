@@ -41,37 +41,37 @@
                 <span class="span1">|</span>
                 <span>收货信息</span>
             </div>
-            <div v-for="(addressList, index) in addressLists" :key="addressList.id">
-                <el-form label-position="top" style="min-height: 500px;" :model="addressList" ref="addressForm"
+           <div v-for="(addresses, index) in formList1.addresses" :key="addresses.id">
+                <el-form label-position="top" style="min-height: 500px;" :model="addresses" ref="addressForm"
                     :rules="rules">
-                    <div style="display: flex; justify-content: flex-end;" v-if="addressLists.length > 1">
-                        <el-button @click="addressLists.splice(index, 1)" link type="danger"
+                   <div style="display: flex; justify-content: flex-end;" v-if="formList1.addresses.length > 1">
+                        <el-button @click="formList1.addresses.splice(index, 1)" link type="danger"
                             size="small">删除此条</el-button>
                     </div>
                     <div class="Form2" style="display: flex; flex-direction: column; align-items: center;">
                         <el-form-item label="配送地址名称" style="width: 440px; margin-bottom: 24px; margin-top: 24px;"
                             size="small" prop="address">
-                            <el-input v-model="addressList.address" style="width: 100%;" placeholder="请填写" />
+                           <el-input v-model="addresses.address" style="width: 100%;" placeholder="请填写" />
                         </el-form-item>
                         <el-form-item label="联系人" style="width: 440px; margin-bottom: 24px;" size="small"
                             prop="contact">
-                            <el-input v-model="addressList.contact" style="width: 100%;" placeholder="请填写" />
+                           <el-input v-model="addresses.contact" style="width: 100%;" placeholder="请填写" />
                         </el-form-item>
                         <el-form-item label="联系人电话" style="width: 440px; margin-bottom: 24px;" size="small"
                             prop="phone">
-                            <el-input v-model="addressList.phone" style="width: 100%;" placeholder="请填写" />
+                           <el-input v-model="addresses.phone" style="width: 100%;" placeholder="请填写" />
                         </el-form-item>
                         <el-form-item label="所在地区" style="width: 440px; margin-bottom: 24px;" size="small"
                             prop="region">
-                            <el-select v-model="addressList.region" style="width: 30%;" placeholder="请选择">
+                           <el-select v-model="addresses.region" style="width: 30%;" placeholder="请选择">
                                 <el-option label="重庆" value="重庆"></el-option>
                                 <el-option label="北京" value="北京"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="详细地址" style="width: 440px; margin-bottom: 24px;" size="small"
                             prop="detailedAddress">
-                            <el-input v-model="addressList.detailedAddress" style="width: 100%;" type="textarea"
-                                :rows="3" placeholder="请输入详细地址" />
+                           <el-input v-model="addresses.detailedAddress" style="width: 100%;" type="textarea" :rows="3"
+                                placeholder="请输入详细地址" />
                         </el-form-item>
                     </div>
                 </el-form>
@@ -89,94 +89,57 @@
 
 
 <script setup lang="ts" name="AddCustomer">
-import { ref, reactive, watch, computed, } from 'vue';
+import { ref, reactive, computed, } from 'vue';
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
-interface addressItem {
-    id: number
-    address: string
-    contact: string
-    phone: string
-    region: string
-    detailedAddress: string
-}
+
+
 interface customerData {
     id: number
+    coding: number
     attribute: string
     type: string
     group: string
     name: string
-    abbreviation?: string
-    remark?: string
-    addresses?: addressItem[]
+    remark: string
     organization: string
+    abbreviation: string
+    addresses: {
+        id: number
+        address: string
+        contact: string
+        phone: string
+        region: string
+        detailedAddress: string
+    }[]
 }
-const props = defineProps({
-    id: {
-        type: Number,
-        default: 0
-    
-    }
-})
-const emit = defineEmits(['update:id'])
-const resetId = () => {
-    emit('update:id', 0)
-}
-
-const formList1 = reactive(
-    {
+let nextId1 = 2103972301206
+let coding = 40999999917
+let nextId = 1
+const formList1 = reactive<customerData>({
+    id:0,
     attribute: '',
     type: '',
+    coding: coding++,
     group: '',
     organization: '',
     name: '',
     abbreviation: '',
-    remark: ''
-    }
-);
-const dialogVisible = ref(false);
-const open = () => {
-    dialogVisible.value = true;
-}
-watch(() => props.id, (newId) => {
-    // 编辑
-    if (newId !== 0) {
-        dialogVisible.value = true
-        console.log(newId);
-        
-    // 新增
-    } else {
-
-    }
-}, { immediate: true })
-const showTitle = computed(() => {
-    return props.id === 0 ? '新增客户' : '编辑客户'
- })
-const clearForm = () => { 
-     nextId = 1
-        addressLists.value = [{
+    remark: '',
+    addresses: [
+        {
             id: nextId++,
             address: '',
             contact: '',
             phone: '',
             region: '',
             detailedAddress: ''
-        }]
-}
-let nextId = 1 
-const addressLists = ref(
-    [{
-        id:nextId++,
-        address: '',
-        contact: '',
-        phone: '',
-        region: '',
-        detailedAddress: ''
-    }]
-)
-const addForm = () => {
-    addressLists.value.push({
-        id:nextId++,
+        }
+    ] 
+})
+const addForm = () => {   
+    formList1.addresses.push({
+        id: nextId++,
         address: '',
         contact: '',
         phone: '',
@@ -184,27 +147,45 @@ const addForm = () => {
         detailedAddress: ''
     })
 }
-const openEdit = (data: customerData) => {
-    formList1.attribute = data.attribute || ''
-    formList1.type = data.type || ''
-    formList1.group = data.group || '' 
-    formList1.name = data.name || ''
-    formList1.remark = data.remark || ''
-    formList1.abbreviation = data.abbreviation || ''
-    formList1.organization = data.organization || ''
-   if (data.addresses && Array.isArray(data.addresses) && data.addresses.length > 0) {
-        nextId = 1
-        addressLists.value = data.addresses.map((addr:addressItem) => ({
-            id: nextId++,
-            address: addr.address || '',
-            contact: addr.contact || '',
-            phone: addr.phone || '',
-            region: addr.region || '',
-            detailedAddress: addr.detailedAddress || ''
-        }))
-    } else {
-        nextId = 1
-        addressLists.value = [{
+const dialogVisible = ref(false);
+// 备份数据（用于取消时恢复）
+let backupFormData: customerData | null = null
+
+const backupData = () => {
+    backupFormData = JSON.parse(JSON.stringify(formList1))
+}
+
+const restoreBackup = () => {
+    if (backupFormData) {
+        Object.assign(formList1, backupFormData)
+        // 更新 nextId
+        if (formList1.addresses.length > 0) {
+            nextId = Math.max(...formList1.addresses.map(a => a.id)) + 1
+        } else {
+            nextId = 1
+        }
+    }
+}
+const open = () => {
+    backupFormData = null 
+    dialogVisible.value = true;
+    clearForm()
+}
+
+const showTitle = computed(() => {
+    return formList1.id === 0 ? '新增客户' : '编辑客户'
+ })
+const clearForm = () => {
+    formList1.id = 0
+    formList1.attribute = ''
+    formList1.type = ''
+    formList1.group = ''
+    formList1.organization = ''
+    formList1.name = ''
+    formList1.abbreviation = ''
+    formList1.remark = ''
+    nextId = 1
+    formList1.addresses = [{
             id: nextId++,
             address: '',
             contact: '',
@@ -212,36 +193,80 @@ const openEdit = (data: customerData) => {
             region: '',
             detailedAddress: ''
         }]
-    }
+}
+
+const openEdit = (data: customerData) => {
+    Object.assign(formList1, {
+        id: data.id || 0,
+        coding: data.coding || 0,
+        attribute: data.attribute || '',
+        type: data.type || '',
+        group: data.group || '',
+        name: data.name || '',
+        remark: data.remark || '',
+        abbreviation: data.abbreviation || '',
+        organization: data.organization || ''
+    })
+    
+    formList1.addresses = data.addresses?.length 
+        ? data.addresses.map((addr) => ({
+            id: nextId++,
+            address: addr.address || '',
+            contact: addr.contact || '',
+            phone: addr.phone || '',
+            region: addr.region || '',
+            detailedAddress: addr.detailedAddress || ''
+        }))
+        : [{ id: nextId, address: '', contact: '', phone: '', region: '', detailedAddress: '' }]
+    
+    backupData()
     
     dialogVisible.value = true
+    backupFormData = null 
 }
 const formOne = ref()
 const addressForm = ref<FormInstance[]>([])
-
+const emit = defineEmits<{
+    (e: 'addCustomer', data: customerData): void
+     (e: 'editCustomer', data: customerData): void
+}>()
 const btnOk = async () => {
     try {
         const validations = [
             formOne.value?.validate(),
             ...addressForm.value.map(form => form?.validate())
         ]
-        await Promise.all(validations) 
-        ElMessage.success('添加成功')
+        await Promise.all(validations)
+        if (formList1.id !== 0) { 
+        const editData = JSON.parse(JSON.stringify(formList1))
+            emit('editCustomer', editData)
+            ElMessage.success('编辑成功')
+        } else {
+        const newData = JSON.parse(JSON.stringify(formList1))
+        newData.id = nextId1++   
+        newData.coding = coding++ 
+          emit('addCustomer',newData)
+            console.log(formList1);
+            ElMessage.success('添加成功')
+        }
         formOne.value?.resetFields()
         addressForm.value.forEach(form => form?.resetFields())
         dialogVisible.value = false
         clearForm()
-       resetId()
     } catch {
         ElMessage.error('请填写完整信息')
     }
 }
 const btnCancel = () => {
+    if (formList1.id !== 0) {
+        restoreBackup()
+        formOne.value?.clearValidate()
+    } else {
         formOne.value?.resetFields()
         addressForm.value.forEach(form => form?.resetFields())
-        dialogVisible.value = false;
-    clearForm()
-        resetId()
+        clearForm()
+    }
+    dialogVisible.value = false
 }
 const rules = reactive({
     attribute: [
@@ -283,7 +308,7 @@ const rules = reactive({
     ]
 })
 
-defineExpose({ open,openEdit })
+defineExpose({ open, openEdit })
 </script>
 
 <style scoped>
