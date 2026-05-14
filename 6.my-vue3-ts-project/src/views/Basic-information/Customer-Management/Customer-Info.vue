@@ -46,7 +46,7 @@
                 <el-table-column prop="name" label="客户名称/姓名" width="160" />
                 <el-table-column prop="remark" label="备注" width="180" show-overflow-tooltip />
                 <el-table-column prop="address" label="操作" width="250">
-                   <el-button link type="primary" size="small" @click="Viewaddress">查看配送地址</el-button>
+                   <el-button link type="primary" size="small" @click="viewAddress">查看配送地址</el-button>
                     <el-button link type="primary" size="small" @click="Edit">编辑</el-button>
                 </el-table-column>
             </el-table>
@@ -56,45 +56,45 @@
         </div>
         <!-- 查看配送地址 -->
         <el-dialog v-model="showDialog" title="查看配送地址" width="500">
-           <el-form :model="DeliveryForm">
+           <el-form :model="deliveryForm">
                 <el-divider />
                 <div class="harvestinformation">
                     <span class="span1">| </span>
                     <span>收货信息1</span>
                 </div>
                 <div class="Receivingaddress">
-                   <span>配送收货地址名称：{{ DeliveryForm.address }}</span>
+                   <span>配送收货地址名称：{{ deliveryForm.address }}</span>
                 </div>
                 <div class="Contact">
-                   <span>联系人：{{ DeliveryForm.contact }}</span>
+                   <span>联系人：{{ deliveryForm.contact }}</span>
                 </div>
                 <div class="Contactnumber">
-                   <span>联系电话：{{ DeliveryForm.phone }}</span>
+                   <span>联系电话：{{ deliveryForm.phone }}</span>
                 </div>
                 <div class="Location">
-                   <span>所在地区：{{ DeliveryForm.region }}</span>
+                   <span>所在地区：{{ deliveryForm.region }}</span>
                 </div>
                 <div class="detailedaddress">
-                   <span>详细地址：{{ DeliveryForm.detailedaddress }}</span>
+                   <span>详细地址：{{ deliveryForm.detailedaddress }}</span>
                 </div>
                 <div class="harvestinformation">
                     <span class="span1">| </span>
                     <span>收货信息2</span>
                 </div>
                 <div class="Receivingaddress">
-                   <span>配送收货地址名称：{{ DeliveryForm.address1 }}</span>
+                   <span>配送收货地址名称：{{ deliveryForm.address1 }}</span>
                 </div>
                 <div class="Contact">
-                   <span>联系人：{{ DeliveryForm.contact1 }}</span>
+                   <span>联系人：{{ deliveryForm.contact1 }}</span>
                 </div>
                 <div class="Contactnumber">
-                   <span>联系电话：{{ DeliveryForm.phone1 }}</span>
+                   <span>联系电话：{{ deliveryForm.phone1 }}</span>
                 </div>
                 <div class="Location">
-                   <span>所在地区：{{ DeliveryForm.region1 }}</span>
+                   <span>所在地区：{{ deliveryForm.region1 }}</span>
                 </div>
                 <div class="detailedaddress">
-                   <span>详细地址：{{ DeliveryForm.detailedaddress1 }}</span>
+                   <span>详细地址：{{ deliveryForm.detailedaddress1 }}</span>
                 </div>
                <el-divider />
                 <el-row type="flex" justify="end" align="middle">
@@ -106,11 +106,12 @@
         </el-dialog>
     </div>
     <!-- 添加客户 -->
-   <Add-customer ref="subinstance" />
+   <Add-customer ref="subinStance" />
 </template>
 
 
 <script setup lang="ts" name="Customer-Info">
+
 import AddCustomer from './components/Add-customer.vue'
 
 import { reactive, ref } from 'vue';
@@ -122,7 +123,7 @@ const formInline = reactive({
   region2: '',
   date: '',
 })
-const DeliveryForm = reactive({
+const deliveryForm = reactive({
     address: '美团一仓',
     contact: '杨丽',
     phone: '13251175885',
@@ -136,10 +137,10 @@ const DeliveryForm = reactive({
 })
 const showDialog = ref( false)
 
-const subinstance = ref()
+const subinStance = ref()
 
 const addCustomer = () => {
-    subinstance.value.open()
+    subinStance.value.open()
 }
 const onSubmit = () => {
     Object.assign(formInline, {
@@ -151,11 +152,11 @@ const onSubmit = () => {
         date: ''
     })
 }
-const Viewaddress = () => {
+const viewAddress = () => {
   showDialog.value = true
 }
 const Edit = () => {
-  console.log('edit!')
+   subinStance.value.open()
 }
 const tableData = [
   {

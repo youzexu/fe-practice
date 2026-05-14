@@ -12,7 +12,7 @@ const router = createRouter({
         {
           path: 'customer',
           name: 'Customer',
-          component: () => import('../views/Basic information/Customer Management/Customer-Info.vue'),
+          component: () => import('../views/Basic-information/Customer-Management/Customer-Info.vue'),
           meta: {
             title: '客户管理',
           }
@@ -20,7 +20,7 @@ const router = createRouter({
         {
           path: 'supplier',
           name: 'Supplier',
-          component: () => import('../views/Basic information/Supplier-Info.vue'),
+          component: () => import('../views/Basic-information/Supplier-Info.vue'),
           meta: {
             title: '供应商管理',
           }
@@ -28,7 +28,7 @@ const router = createRouter({
         {
           path: 'team',
           name: 'Team',
-          component: () => import('../views/Basic information/Team-Info.vue'),
+          component: () => import('../views/Basic-information/Team-Info.vue'),
           meta: {
             title: '团队管理',
           }
