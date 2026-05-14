@@ -151,6 +151,14 @@ const tableData = ref( [
                 phone: '1532478232',
                 region: '重庆市 市辖区 渝北区',
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+                },
+            {
+                 id:2103972013,
+                address: '美团十三仓',
+                contact: '嘉豪',
+                phone: '1532478232',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             }
         ]
   },
