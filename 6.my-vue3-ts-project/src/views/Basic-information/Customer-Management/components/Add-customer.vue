@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog v-model="dialogVisible" title="新增客户" width="520" @close="btnCancel">
+       <el-dialog v-model="dialogVisible" :title="showTitle" width="520" @close="btnCancel">
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
                 ref="formOne" :rules="rules">
                 <el-form-item label="客户属性" style="width: 100%;margin-bottom: 24px;" size="small" prop="attribute">
@@ -89,9 +89,40 @@
 
 
 <script setup lang="ts" name="AddCustomer">
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch, computed, } from 'vue';
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
+interface addressItem {
+    id: number
+    address: string
+    contact: string
+    phone: string
+    region: string
+    detailedAddress: string
+}
+interface customerData {
+    id: number
+    attribute: string
+    type: string
+    group: string
+    name: string
+    abbreviation?: string
+    remark?: string
+    addresses?: addressItem[]
+    organization: string
+}
+const props = defineProps({
+    id: {
+        type: Number,
+        default: 0
+    
+    }
+})
+const emit = defineEmits(['update:id'])
+const resetId = () => {
+    emit('update:id', 0)
+}
+
 const formList1 = reactive(
     {
     attribute: '',
@@ -107,6 +138,20 @@ const dialogVisible = ref(false);
 const open = () => {
     dialogVisible.value = true;
 }
+watch(() => props.id, (newId) => {
+    // 编辑
+    if (newId !== 0) {
+        dialogVisible.value = true
+        console.log(newId);
+        
+    // 新增
+    } else {
+
+    }
+}, { immediate: true })
+const showTitle = computed(() => {
+    return props.id === 0 ? '新增客户' : '编辑客户'
+ })
 const clearForm = () => { 
      nextId = 1
         addressLists.value = [{
@@ -139,6 +184,38 @@ const addForm = () => {
         detailedAddress: ''
     })
 }
+const openEdit = (data: customerData) => {
+    formList1.attribute = data.attribute || ''
+    formList1.type = data.type || ''
+    formList1.group = data.group || '' 
+    formList1.name = data.name || ''
+    formList1.remark = data.remark || ''
+    formList1.abbreviation = data.abbreviation || ''
+    formList1.organization = data.organization || ''
+   if (data.addresses && Array.isArray(data.addresses) && data.addresses.length > 0) {
+        nextId = 1
+        addressLists.value = data.addresses.map((addr:addressItem) => ({
+            id: nextId++,
+            address: addr.address || '',
+            contact: addr.contact || '',
+            phone: addr.phone || '',
+            region: addr.region || '',
+            detailedAddress: addr.detailedAddress || ''
+        }))
+    } else {
+        nextId = 1
+        addressLists.value = [{
+            id: nextId++,
+            address: '',
+            contact: '',
+            phone: '',
+            region: '',
+            detailedAddress: ''
+        }]
+    }
+    
+    dialogVisible.value = true
+}
 const formOne = ref()
 const addressForm = ref<FormInstance[]>([])
 
@@ -153,7 +230,8 @@ const btnOk = async () => {
         formOne.value?.resetFields()
         addressForm.value.forEach(form => form?.resetFields())
         dialogVisible.value = false
-       clearForm()
+        clearForm()
+       resetId()
     } catch {
         ElMessage.error('请填写完整信息')
     }
@@ -162,7 +240,8 @@ const btnCancel = () => {
         formOne.value?.resetFields()
         addressForm.value.forEach(form => form?.resetFields())
         dialogVisible.value = false;
-        clearForm()
+    clearForm()
+        resetId()
 }
 const rules = reactive({
     attribute: [
@@ -204,7 +283,7 @@ const rules = reactive({
     ]
 })
 
-defineExpose({ open })
+defineExpose({ open,openEdit })
 </script>
 
 <style scoped>

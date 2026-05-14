@@ -42,12 +42,14 @@
                 <el-table-column prop="coding" label="客户财务编码" width="180" />
                 <el-table-column prop="attribute" label="客户属性" width="180" />
                 <el-table-column prop="type" label="客户类型" width="160" />
-                <el-table-column prop="grouping" label="客户分组" width="160" />
+               <el-table-column prop="group" label="客户分组" width="160" />
                 <el-table-column prop="name" label="客户名称/姓名" width="160" />
                 <el-table-column prop="remark" label="备注" width="180" show-overflow-tooltip />
                 <el-table-column prop="address" label="操作" width="250">
-                   <el-button link type="primary" size="small" @click="viewAddress">查看配送地址</el-button>
-                    <el-button link type="primary" size="small" @click="Edit">编辑</el-button>
+                   <template v-slot="{ row }">
+                       <el-button link type="primary" size="small" @click="viewAddress">查看配送地址</el-button>
+                       <el-button link type="primary" size="small" @click="Edit(row)">编辑</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
             <el-row type="flex" justify="end" align="middle">
@@ -106,7 +108,7 @@
         </el-dialog>
     </div>
     <!-- 添加客户 -->
-   <Add-customer ref="subinStance" />
+   <Add-customer ref="subinStance" :id="editId" @update:id="editId = $event" />
 </template>
 
 
@@ -115,6 +117,15 @@
 import AddCustomer from './components/Add-customer.vue'
 
 import { reactive, ref } from 'vue';
+interface CustomerData {
+    id: number
+    coding: string
+    attribute: string
+    type: string
+    grouping: string
+    name: string
+    remark: string
+}
 const formInline = reactive({
   user: '',
   user1: '',
@@ -136,10 +147,10 @@ const deliveryForm = reactive({
     detailedaddress1: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
 })
 const showDialog = ref( false)
-
 const subinStance = ref()
-
+const editId = ref(0)
 const addCustomer = () => {
+    editId.value = 0 
     subinStance.value.open()
 }
 const onSubmit = () => {
@@ -153,59 +164,167 @@ const onSubmit = () => {
     })
 }
 const viewAddress = () => {
-  showDialog.value = true
+    editId.value = 0 
+    showDialog.value = true
 }
-const Edit = () => {
-   subinStance.value.open()
+const Edit = (row:CustomerData) => {
+    editId.value = row.id
+    subinStance.value.openEdit(row)
 }
 const tableData = [
-  {
+    {
+    id:2103972301201,
     coding: '40999999911',
     attribute: '外部',
-    grouping: '商超',
+    group: '商超',
     name: '加剋夫',
     remark: '我带我活动i啊我都i啊我活动kkkk',
     type: '个人',
+        organization: '北京分公司',
+    abbreviation: '加剋夫',
+            addresses: [
+            {
+                address: '美团一仓',
+                contact: '杨丽',
+                phone: '13251175885',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            },
+            {
+                address: '美团二仓',
+                contact: '嘉豪',
+                phone: '1532478232',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            }
+        ]
   },
-  {
+    {
+    id:2103972301202,
     coding: '40999999912',
     attribute: '外部',
-    grouping: '上群',
+    group: '上群',
     name: '好又多',
     remark: '备注',
-     type: '个人',
+        type: '个人',
+        organization: '重庆分公司',
+        abbreviation: '好又多',
+             addresses: [
+            {
+                address: '美团三仓',
+                contact: '帅哥',
+                phone: '13251175885',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            }
+        ]
   },
-  {
+    {
+    id:2103972301203,
     coding: '40999999913',
     attribute: '内部',
-    grouping: '社群',
+    group: '社群',
     name: '中百大潮',
     remark: '备注',
-     type: '个人',
+    type: '个人',
+    organization: '四川分公司',
+        abbreviation: '中百大潮',
+            addresses: [
+            {
+                address: '美团五仓',
+                contact: '杨丽',
+                phone: '13251175885',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            },
+            {
+                address: '美团六仓',
+                contact: '嘉豪',
+                phone: '1532478232',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            }
+        ]
   },
-  {
+    {
+    id:2103972301204,
     coding: '40999999914',
     attribute: '内部',
-    grouping: '团建',
+    group: '团建',
     name: '加号团建',
     remark: '备注',
-     type: '个人',
+    type: '个人',
+    organization: '上海分公司',
+    abbreviation: '加号团建',        addresses: [
+            {
+                address: '美团七仓',
+                contact: '杨丽',
+                phone: '13251175885',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            },
+            {
+                address: '美团八仓',
+                contact: '嘉豪',
+                phone: '1532478232',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            }
+        ]
   },
- {
+    {
+    id:2103972301205,
     coding: '40999999915',
     attribute: '内部',
-    grouping: '社群',
+    group: '社群',
     name: '重庆批发',
     remark: '备注',
-     type: '个人',
+    type: '个人',
+    organization: '南京分公司',
+        abbreviation: '中百大潮',
+             addresses: [
+            {
+                address: '美团九仓',
+                contact: '杨丽',
+                phone: '13251175885',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            },
+            {
+                address: '美团十仓',
+                contact: '嘉豪',
+                phone: '1532478232',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            }
+        ]
   },
- {
+    {
+    id: 2103972301206,
     coding: '40999999915',
     attribute: '内部',
-    grouping: '社群',
+    group: '社群',
     name: '重庆批发',
     remark: '备注',
-     type: '个人',
+    type: '个人',
+    organization: '河北分公司',
+        abbreviation: '中百大潮',
+             addresses: [
+            {
+                address: '美团十一仓',
+                contact: '杨丽',
+                phone: '13251175885',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            },
+            {
+                address: '美团十二仓',
+                contact: '嘉豪',
+                phone: '1532478232',
+                region: '重庆市 市辖区 渝北区',
+                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
+            }
+        ]
   },
 ]
 
