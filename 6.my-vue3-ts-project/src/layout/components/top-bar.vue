@@ -3,12 +3,24 @@
    <div class="leftSide">
       <img class="icons" src="../../icons/水果.svg">
       <span>水果产业供应链SaaS平台</span>
+     <el-divider direction="vertical" />
+      <span>重庆一仓-生产系统</span>
+      <el-dropdown>
+        <el-icon>
+          <arrow-down />
+        </el-icon>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>二仓</el-dropdown-item>
+            <el-dropdown-item>三仓</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
       <div class="fold" @click="toggleCollapse">
         <el-icon>
           <Fold v-if="!collapse" />
           <Expand v-else />
-        </el-icon>
-        <span v-if="!collapse">收起</span>
+       </el-icon>
       </div>
     </div>
     <div class="language-item">
