@@ -1,23 +1,88 @@
 <template>
   <div class="top-bar">
-    <div class="logo">水果产业供应链SaaS平台</div>
-    <div class="user-info">用户名</div>
+   <div class="leftSide">
+      <img class="icons" src="../../icons/水果.svg">
+      <span>水果产业供应链SaaS平台</span>
+      <div class="fold" @click="toggleCollapse">
+        <el-icon>
+          <Fold v-if="!collapse" />
+          <Expand v-else />
+        </el-icon>
+        <span v-if="!collapse">收起</span>
+      </div>
+    </div>
+    <div class="language-item">
+      <img class="icons2" src="../../icons/多语言.svg">
+      <span class="lang">中文</span>
+      <el-divider direction="vertical" />
+      <span class="userName">用户名</span>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts" name="TopBar">
-</script>
+import { Fold, Expand } from '@element-plus/icons-vue'
 
+const props = defineProps<{
+  collapse: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:collapse', value: boolean): void
+}>()
+
+const toggleCollapse = () => {
+  emit('update:collapse', !props.collapse)
+}
+</script>
 
 <style scoped>
 .top-bar {
   height: 48px;
   background: #1D232B;
-  box-shadow: 0px 1px 4px 0px rgba(0, 21, 41, 0.12);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
   color: #fff;
+}
+.leftSide {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fold {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.fold:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.language-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icons {
+  width: 30px;
+  height: 30px;
+}
+
+.icons2 {
+  width: 16px;
+  height: 16px;
+}
+
+.el-divider--vertical {
+  height: 16px;
+  margin: 0;
 }
 </style>

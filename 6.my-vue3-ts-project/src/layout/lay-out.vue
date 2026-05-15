@@ -1,8 +1,8 @@
 <template>
   <div class="layout">
-    <TopBar />
+   <TopBar v-model:collapse="isCollapsed" />
     <div class="main-wrapper">
-      <LeftSidebar />
+     <LeftSidebar v-model:collapse="isCollapsed" />
       <div class="content-wrapper">
         <AppMain />
       </div>
@@ -14,6 +14,8 @@
 import TopBar from './components/top-bar.vue'
 import LeftSidebar from './components/left-sidebar.vue'
 import AppMain from './components/App-Main.vue'
+import { ref } from 'vue';
+const isCollapsed = ref(false)
 </script>
 
 <style scoped>

@@ -1,13 +1,5 @@
 <template>
-  <div class="sidebar" :class="{ collapse }">
-    <div class="fold" @click="collapse = !collapse">
-      <el-icon>
-        <Fold v-if="!collapse" />
-        <Expand v-else />
-      </el-icon>
-      <span v-if="!collapse">收起</span>
-    </div>
-
+ <div class="sidebar" :class="{ collapse }">
     <el-menu :collapse="collapse" :collapse-transition="false" background-color="transparent" text-color="#bfcbd9"
       active-text-color="#409eff">
       <el-menu-item index="/dashboard">
@@ -31,12 +23,13 @@
 </template>
 
 <script lang="ts" setup name="LeftSidebar">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+defineProps<{
+  collapse: boolean
+}>()
 
 const router = useRouter()
-const collapse = ref(false)
 
 const go = (name: string) => router.push({ name })
 

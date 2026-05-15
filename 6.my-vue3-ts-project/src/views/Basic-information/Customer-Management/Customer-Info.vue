@@ -37,7 +37,7 @@
         </el-form>
     </div>
     <div class="bottom-menu">
-        <el-button class="btn-export" size="small" type="primary">导出</el-button>
+       <el-button class="btn-export" size="small" type="primary" @click="exportData">导出</el-button>
         <el-button class="btn-add" size="small" @click="addCustomer">新增客户</el-button>
         <div class="bottom-menu1">
             <!-- 表格 -->
@@ -371,6 +371,10 @@ const handleEditData = (data: customerData1) => {
         tableData.value[index] = { ...tableData.value[index], ...data }
     }
     console.log(data);
+}
+// 导出数据
+const exportData = () => { 
+    
 }
 </script>
 
