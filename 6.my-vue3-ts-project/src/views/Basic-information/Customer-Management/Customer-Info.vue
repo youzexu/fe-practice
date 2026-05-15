@@ -1,6 +1,6 @@
 <template>
     <div class="customer-info">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="width: 100%;">
             <el-form-item label="客户属性：">
                <el-select v-model="formInline.attribute" placeholder="请选择客户属性" clearable style="width: 299px;">
                     <el-option label="外部" value="外部" />
@@ -42,22 +42,22 @@
         <div class="bottom-menu1">
             <!-- 表格 -->
             <el-table :data="tableData" border style="width: 100%">
-                <el-table-column prop="coding" label="客户财务编码" width="180" />
-                <el-table-column prop="attribute" label="客户属性" width="180" />
-                <el-table-column prop="type" label="客户类型" width="160" />
-               <el-table-column prop="group" label="客户分组" width="160" />
-                <el-table-column prop="name" label="客户名称/姓名" width="160" />
-                <el-table-column prop="remark" label="备注" width="180" show-overflow-tooltip />
-                <el-table-column prop="address" label="操作" width="250">
-                   <template v-slot="{ row }">
-                       <el-button link type="primary" size="small" @click="viewAddress(row)">查看配送地址</el-button>
+               <el-table-column prop="coding" label="客户财务编码" min-width="180" />
+                <el-table-column prop="attribute" label="客户属性" min-width="180" />
+                <el-table-column prop="type" label="客户类型" min-width="160" />
+                <el-table-column prop="group" label="客户分组" min-width="160" />
+                <el-table-column prop="name" label="客户名称/姓名" min-width="160" />
+                <el-table-column prop="remark" label="备注" min-width="180" show-overflow-tooltip />
+                <el-table-column prop="address" label="操作" min-width="228">
+                    <template v-slot="{ row }">
+                        <el-button link type="primary" size="small" @click="viewAddress(row)">查看配送地址</el-button>
                         <el-button link type="primary" size="small" @click="Edit(row)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
            <!-- 分页 -->
-            <el-row type="flex" justify="end" align="middle">
-               <el-pagination :locale="zhCn" v-model:current-page="currentPage" v-model:page-size="pageSize"
+           <el-row type="flex" justify="end" align="middle" style="margin-top: 16px;">
+                <el-pagination :locale="zhCn" v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[1, 2, 5, 10]" :total="total" size="small" background
                     layout="total, sizes, prev, pager, next, jumper" @current-change="handlePageChange"
                     @size-change="handleSizeChange" />
@@ -430,6 +430,10 @@ const exportData = () => {
     margin-bottom: 72px;
     margin-left: 24px;
     margin-right: 24px;
+    flex: 1;
+        overflow-x: auto;
+        overflow-y: auto;
+        min-height: 0;
 }
 
 .btn-export {
