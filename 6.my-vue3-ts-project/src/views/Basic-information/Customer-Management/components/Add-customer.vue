@@ -3,18 +3,24 @@
        <el-dialog v-model="dialogVisible" :title="showTitle" width="520" @close="btnCancel">
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
                 ref="formOne" :rules="rules">
-                <el-form-item label="客户属性" style="width: 100%;margin-bottom: 24px;" size="small" prop="attribute">
-                    <el-select placeholder="请选择" v-model="formList1.attribute">
-                       <el-option label="外部" value="外部"></el-option>
-                        <el-option label="内部" value="内部"></el-option>
+               <el-form-item :label="formList1.id !== 0 ? `客户属性: ${formList1.attribute}` : '客户属性'"
+                    style="width: 100%;margin-bottom: 24px;" size="small" prop="attribute">
+                    <el-select v-if="formList1.id === 0" placeholder="请选择" v-model="formList1.attribute">
+                        <el-option label="外部" value="外部" />
+                        <el-option label="内部" value="内部" />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="客户类型" style="width: 100%;margin-bottom: 24px;" size="small" prop="type">
-                    <el-select placeholder="请选择" v-model="formList1.type">
+               <el-form-item :label="formList1.id !== 0 ? `客户类型: ${formList1.type}` : '客户类型'"
+                    style="width: 100%;margin-bottom: 24px;" size="small" prop="type">
+                    <el-select v-if="formList1.id === 0" placeholder="请选择" v-model="formList1.type">
                        <el-option label="企业" value="企业"></el-option>
                         <el-option label="个人" value="个人"></el-option>
                         <el-option label="其他" value="其他"></el-option>
                     </el-select>
+               </el-form-item>
+                <el-form-item v-if="formList1.id !== 0" label="客户编码" style="width: 100%;margin-bottom: 24px;"
+                    size="small" prop="coding">
+                    <el-input placeholder="请输入" v-model="formList1.coding" />
                 </el-form-item>
                 <el-form-item label="客户分组" style="width: 100%; margin-bottom: 24px;" size="small" prop="group">
                     <el-select placeholder="请选择" v-model="formList1.group">
@@ -290,6 +296,9 @@ const rules = reactive({
     ],
     group: [
         { required: true, message: '请选择客户分组', trigger: 'blur' }
+    ],
+    coding: [
+        {required: true, message: '请填写客户编码', trigger: 'blur' }
     ],
     organization: [
         { required: true, message: '请选择客户所属组织', trigger: 'blur' }
