@@ -1,37 +1,37 @@
 <template>
  <div class="sidebar" :class="{ collapse }">
-    <el-menu :collapse="collapse" :collapse-transition="false" background-color="transparent" text-color="#bfcbd9"
-      active-text-color="#409eff">
-      <el-menu-item index="/dashboard">
+   <el-menu :router="true" :collapse="collapse" :collapse-transition="false" background-color="transparent"
+      text-color="#bfcbd9" active-text-color="#409eff">
+      <el-menu-item>
         <el-icon>
           <location />
         </el-icon>
         <span>驾驶舱</span>
-      </el-menu-item>
+     </el-menu-item>
       <el-sub-menu index="basic">
         <template #title>
           <el-icon>
             <location />
-          </el-icon><span>基础信息</span>
+         </el-icon>
+          <span>基础信息</span>
         </template>
-        <el-menu-item index="/team" @click="go('Team')">团队管理</el-menu-item>
-        <el-menu-item index="/customer" @click="go('Customer')">客户管理</el-menu-item>
-        <el-menu-item index="/supplier" @click="go('Supplier')">供应商管理</el-menu-item>
+       <el-menu-item index="/foundation/team">团队管理</el-menu-item>
+        <el-menu-item index="/foundation/customer">客户管理</el-menu-item>
+        <el-menu-item index="/foundation/supplier">供应商管理</el-menu-item>
       </el-sub-menu>
     </el-menu>
   </div>
 </template>
 
 <script lang="ts" setup name="LeftSidebar">
-import { useRouter } from 'vue-router'
 
 defineProps<{
   collapse: boolean
 }>()
 
-const router = useRouter()
 
-const go = (name: string) => router.push({ name })
+
+
 
 </script>
 
