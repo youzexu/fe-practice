@@ -343,6 +343,7 @@ const reset = () => {
     })
     tableData.value = [...originTableData.value]
     currentPage.value = 1
+    onSubmit()
 }
 // 打开查询地址表单
 const viewAddress = (row:customerData1) => {
