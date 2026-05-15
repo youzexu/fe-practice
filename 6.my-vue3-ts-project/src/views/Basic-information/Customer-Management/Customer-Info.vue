@@ -57,7 +57,10 @@
             </el-table>
            <!-- 分页 -->
             <el-row type="flex" justify="end" align="middle">
-                <el-pagination size="small" background layout="prev, pager, next" :total="50" class="mt-4" />
+               <el-pagination :locale="zhCn" v-model:current-page="currentPage" v-model:page-size="pageSize"
+                    :page-sizes="[1, 2, 5, 10]" :total="total" size="small" background
+                    layout="total, sizes, prev, pager, next, jumper" @current-change="handlePageChange"
+                    @size-change="handleSizeChange" />
             </el-row>
         </div>
         <!-- 查看配送地址 -->
@@ -98,10 +101,13 @@
 
 
 <script setup lang="ts" name="Customer-Info">
-
-
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import AddCustomer from './components/Add-customer.vue'
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
+// 调用分页
+onMounted(() => {
+    onSubmit()
+})
 // 规范化数据接口
 interface customerData1 {
     id: number
@@ -318,6 +324,11 @@ const currentAddresses = ref<{
     detailedAddress: string
 }[]>([])
 // 定义弹窗
+const total = ref(0) // 总数
+const currentPage = ref(1)  // 当前页码
+const pageSize = ref(5)    // 每页条数
+
+// 当前页显示的数据
 const showDialog = ref(false)
 // 定义子组件
 const subinStance = ref()
@@ -331,6 +342,7 @@ const reset = () => {
     abbreviation: '',
     })
     tableData.value = [...originTableData.value]
+    currentPage.value = 1
 }
 // 打开查询地址表单
 const viewAddress = (row:customerData1) => {
@@ -350,19 +362,40 @@ const handleAddData = (data: customerData1) => {
     console.log(data);
     tableData.value.unshift(data)
     originTableData.value.unshift(data)
+    onSubmit()
 }
 // 保存原始数据
 const originTableData = ref<customerData1[]>([...tableData.value])
 // 查询表单
 const onSubmit = () => {
-  tableData.value = originTableData.value.filter(item => {
-    if (formInline.attribute && item.attribute !== formInline.attribute) return false
-    if (formInline.type && item.type !== formInline.type) return false
-    if (formInline.group && item.group !== formInline.group) return false
-    if (formInline.name && !item.name.includes(formInline.name)) return false
-    if (formInline.abbreviation && !item.abbreviation.includes(formInline.abbreviation)) return false
-    return true
-  })
+    // 筛选数据
+    const filtered = originTableData.value.filter(item => {
+        if (formInline.attribute && item.attribute !== formInline.attribute) return false
+        if (formInline.type && item.type !== formInline.type) return false
+        if (formInline.group && item.group !== formInline.group) return false
+        if (formInline.name && !item.name.includes(formInline.name)) return false
+        if (formInline.abbreviation && !item.abbreviation.includes(formInline.abbreviation)) return false
+        return true
+    })
+    
+    // 更新总数
+    total.value = filtered.length
+    
+    // 分页
+    const start = (currentPage.value - 1) * pageSize.value
+    tableData.value = filtered.slice(start, start + pageSize.value)
+}
+// 每页条数切换（新增）
+const handleSizeChange = (size: number) => {
+    pageSize.value = size
+    currentPage.value = 1
+    onSubmit()
+}
+
+// 分页切换
+const handlePageChange = (page: number) => {
+    currentPage.value = page
+    onSubmit()
 }
 // 编辑
 const handleEditData = (data: customerData1) => {
@@ -374,7 +407,7 @@ const handleEditData = (data: customerData1) => {
 }
 // 导出数据
 const exportData = () => { 
-    
+    console.log(tableData.value);
 }
 </script>
 
