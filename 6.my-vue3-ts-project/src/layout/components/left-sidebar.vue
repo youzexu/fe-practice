@@ -1,33 +1,48 @@
 <template>
  <div class="sidebar" :class="{ collapse }">
-   <el-menu :router="true" :collapse="collapse" :collapse-transition="false" background-color="transparent"
+   <el-menu router :collapse="collapse" :collapse-transition="false" background-color="transparent"
       text-color="#bfcbd9" active-text-color="#409eff">
-      <el-menu-item>
-        <el-icon>
-          <location />
-        </el-icon>
-        <span>驾驶舱</span>
-     </el-menu-item>
-      <el-sub-menu index="basic">
-        <template #title>
+     <template v-for="item in menuList" :key="item.path">
+        <el-sub-menu v-if="item.children && item.children?.length" :index="item.path">
+          <template #title>
+            <el-icon>
+              <location />
+            </el-icon>
+           <span>{{ item.meta?.title }}</span>
+          </template>
+          <el-menu-item v-for="children in item.children" :key="children.path" :index="children.path">
+            {{ children.meta?.title }}
+          </el-menu-item>
+       </el-sub-menu>
+        <el-menu-item v-else :index="item.path">
           <el-icon>
             <location />
          </el-icon>
-          <span>基础信息</span>
-        </template>
-       <el-menu-item index="/foundation/team">团队管理</el-menu-item>
-        <el-menu-item index="/foundation/customer">客户管理</el-menu-item>
-        <el-menu-item index="/foundation/supplier">供应商管理</el-menu-item>
-      </el-sub-menu>
+         <span>{{ item.meta?.title }}</span>
+        </el-menu-item>
+      </template>
     </el-menu>
   </div>
 </template>
 
 <script lang="ts" setup name="LeftSidebar">
+import router from '@/router';
+import { computed } from 'vue';
 
 defineProps<{
   collapse: boolean
 }>()
+console.log(router.getRoutes());
+
+
+const menuList = computed(() => {
+  const routes = router.getRoutes();
+  const layoutRoute = routes.find(route => route.path === '/')
+  if (!layoutRoute?.children) return []
+  return layoutRoute.children.filter(route => route.meta?.title)
+ })
+
+
 
 
 
