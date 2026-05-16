@@ -1,6 +1,6 @@
 <template>
  <div class="sidebar" :class="{ collapse }">
-   <el-menu router :collapse="collapse" :collapse-transition="false" background-color="transparent"
+   <el-menu router :collapse="collapse" background-color="transparent"
       text-color="#bfcbd9" active-text-color="#409eff">
      <template v-for="item in menuList" :key="item.path">
         <el-sub-menu v-if="item.children && item.children?.length" :index="item.path">
@@ -10,7 +10,8 @@
             </el-icon>
            <span>{{ item.meta?.title }}</span>
           </template>
-          <el-menu-item v-for="children in item.children" :key="children.path" :index="children.path">
+         <el-menu-item v-for="children in item.children" :key="children.path"
+            :index="`/${item.path}/${children.path}`">
             {{ children.meta?.title }}
           </el-menu-item>
        </el-sub-menu>
@@ -29,23 +30,19 @@
 import router from '@/router';
 import { computed } from 'vue';
 
+// 折叠菜单
 defineProps<{
   collapse: boolean
 }>()
-console.log(router.getRoutes());
+// console.log(router.getRoutes());
 
-
+// 获取路由中菜单列表
 const menuList = computed(() => {
   const routes = router.getRoutes();
   const layoutRoute = routes.find(route => route.path === '/')
   if (!layoutRoute?.children) return []
   return layoutRoute.children.filter(route => route.meta?.title)
  })
-
-
-
-
-
 
 
 </script>

@@ -15,6 +15,7 @@ import TopBar from './components/top-bar.vue'
 import LeftSidebar from './components/left-sidebar.vue'
 import AppMain from './components/App-Main.vue'
 import { ref } from 'vue';
+
 const isCollapsed = ref(false)
 </script>
 
