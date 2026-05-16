@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@/layout/lay-out.vue'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
+// 路由配置
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -9,40 +12,6 @@ const router = createRouter({
       component: Layout,
       redirect: '/foundation/customer',
       children: [
-        // 库存信息路由
-        {
-          path: 'inventory',
-          name: 'Inventory',
-          meta: {
-            title: '库存管理',
-          },
-          children: [
-            {
-              path: 'warehousing',
-              name: 'Warehousing',
-              component: () => import('../views/inventory-record/Stock-record/stock-info.vue'),
-              meta: {
-                title: '入库记录',
-              }
-            },
-            {
-              path: 'outbound',
-              name: 'Outbound',
-              component: () => import('../views/inventory-record/Outbound-record/outbound-info.vue'),
-              meta: {
-                title: '出库记录',
-              }
-            },
-            {
-              path: 'transformation',
-              name: 'Transformation',
-              component: () => import('../views/inventory-record/Conversion-record/Conversion-info.vue'),
-              meta: {
-                title: '转换记录',
-              }
-            }
-          ]
-        },
         // 基础信息路由
         {
           path: 'foundation',
@@ -77,9 +46,77 @@ const router = createRouter({
             }
           ]
         },
+        // 库存信息路由
+        {
+          path: 'inventory',
+          name: 'Inventory',
+          meta: {
+            title: '库存管理',
+          },
+          children: [
+            {
+              path: 'warehousing',
+              name: 'Warehousing',
+              component: () => import('../views/inventory-record/Stock-record/stock-info.vue'),
+              meta: {
+                title: '入库记录',
+              }
+            },
+            {
+              path: 'outbound',
+              name: 'Outbound',
+              component: () => import('../views/inventory-record/Outbound-record/outbound-info.vue'),
+              meta: {
+                title: '出库记录',
+              }
+            },
+            {
+              path: 'transformation',
+              name: 'Transformation',
+              component: () => import('../views/inventory-record/Conversion-record/conversion-info.vue'),
+              meta: {
+                title: '转换记录',
+              }
+            }
+          ]
+        },
+        // 收入管理
+        {
+          path: 'revenue',
+          name: 'Revenue',
+          meta: {
+            title: '收入管理',
+          },
+          children: [
+            {
+              path: 'financial',
+              name: 'Financial',
+              component: () => import('../views/revenue-management/financial-review/Financial-info.vue'),
+              meta: {
+                title: '财务复核'
+              }
+            },
+            {
+              path: 'income',
+              name: 'Income',
+              component: () => import('../views/revenue-management/income-approval/income-info.vue'),
+              meta: {
+                title: '收入审批'
+              }
+            }
+          ]
+        }
       ]
     }
   ]
 })
 
+// 全局路由守卫
+router.beforeEach((to, from) => {
+  NProgress.start()
+  return true
+})
+router.afterEach(() => {
+  NProgress.done()
+})
 export default router

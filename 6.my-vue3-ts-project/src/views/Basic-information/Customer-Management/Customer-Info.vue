@@ -1,6 +1,6 @@
 <template>
     <div class="customer-info">
-       <el-form :inline="true" :model="formInline" class="demo-form-inline" style="width: 100%;">
+       <el-form :inline="true" :model="formInline" style="width: 100%;">
             <el-form-item label="客户属性：">
                <el-select v-model="formInline.attribute" placeholder="请选择客户属性" clearable style="width: 299px;">
                     <el-option label="外部" value="外部" />
