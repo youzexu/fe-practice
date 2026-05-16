@@ -57,7 +57,7 @@ const router = createRouter({
             {
               path: 'warehousing',
               name: 'Warehousing',
-              component: () => import('../views/inventory-record/Stock-record/stock-info.vue'),
+              component: () => import('../views/inventory-record/Stock-record/Stock-info.vue'),
               meta: {
                 title: '入库记录',
               }
@@ -65,7 +65,7 @@ const router = createRouter({
             {
               path: 'outbound',
               name: 'Outbound',
-              component: () => import('../views/inventory-record/Outbound-record/outbound-info.vue'),
+              component: () => import('../views/inventory-record/Outbound-record/Outbound-info.vue'),
               meta: {
                 title: '出库记录',
               }
@@ -73,7 +73,7 @@ const router = createRouter({
             {
               path: 'transformation',
               name: 'Transformation',
-              component: () => import('../views/inventory-record/Conversion-record/conversion-info.vue'),
+              component: () => import('../views/inventory-record/Conversion-record/Conversion-info.vue'),
               meta: {
                 title: '转换记录',
               }
@@ -99,7 +99,7 @@ const router = createRouter({
             {
               path: 'income',
               name: 'Income',
-              component: () => import('../views/revenue-management/income-approval/income-info.vue'),
+              component: () => import('../views/revenue-management/income-approval/Income-info.vue'),
               meta: {
                 title: '收入审批'
               }

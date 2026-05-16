@@ -34,17 +34,17 @@
     </div>
     <div class="bottom-menu">
         <el-button class="btn-export" size="small" type="primary" @click="exportData">导出</el-button>
-        <el-button class="btn-add" size="small" @click="addCustomer">新增客户</el-button>
+       <el-button class="btn-add" size="small" @click="addCustomer">新增供应商</el-button>
         <div class="bottom-menu1">
             <!-- 表格 -->
             <el-table :data="tableData" border style="width: 100%">
                 <el-table-column prop="coding" label="供应商财务编码" min-width="180" />
                 <el-table-column prop="attribute" label="供应商属性" min-width="180" />
                 <el-table-column prop="type" label="供应商类型" min-width="160" />
-                <el-table-column prop="group" label="供应商组织" min-width="160" />
-                <el-table-column prop="name" label="供应商地址" min-width="160" show-overflow-tooltip />
+               <el-table-column prop="organization" label="供应商组织" min-width="160" />
+                <el-table-column prop="address" label="供应商地址" min-width="160" show-overflow-tooltip />
                 <el-table-column prop="remark" label="备注" min-width="180" show-overflow-tooltip />
-                <el-table-column prop="address" label="操作" min-width="228">
+               <el-table-column label="操作" min-width="228">
                     <template v-slot="{ row }">
                         <el-button link type="primary" size="small" @click="viewAddress(row)">查看配送地址</el-button>
                         <el-button link type="primary" size="small" @click="Edit(row)">编辑</el-button>
@@ -61,27 +61,16 @@
         </div>
         <!-- 查看配送地址 -->
         <el-dialog v-model="showDialog" title="查看配送地址" width="500">
-            <el-divider />
-            <div v-for="(value, index) in currentAddresses" :key="value.id">
-                <div class="harvestinformation">
-                    <span class="span1">| </span>
-                    <span>收货信息{{ index + 1 }}</span>
-                </div>
-                <div class="Receivingaddress">
-                    <span>配送收货地址名称：{{ value.address }}</span>
-                </div>
-                <div class="Contact">
-                    <span>联系人：{{ value.contact }}</span>
-                </div>
-                <div class="Contactnumber">
-                    <span>联系电话：{{ value.phone }}</span>
-                </div>
-                <div class="Location">
-                    <span>所在地区：{{ value.region }}</span>
-                </div>
-                <div class="detailedaddress">
-                    <span>详细地址：{{ value.detailedAddress }}</span>
-                </div>
+           <el-divider />
+           <div class="harvestinformation">
+                <span class="span1">| </span>
+               <span>收货信息</span>
+            </div>
+            <div class="Receivingaddress">
+               <span>配送收货地址名称：{{ currentAddresses[0]?.address }}</span>
+            </div>
+           <div class="Receivingaddress">
+                <span>门牌号：{{ currentAddresses[0]?.house }}</span>
             </div>
             <el-divider />
             <el-row type="flex" justify="end" align="middle">
@@ -91,235 +80,144 @@
             </el-row>
         </el-dialog>
     </div>
+   <Add-supplier ref="subinStance" @addCustomer="handleAddData" />
 </template>
 
 
 <script setup lang="ts" name="Supplier-Info">
+import AddSupplier from './components/Add-supplier.vue';
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { ref, reactive, onMounted } from 'vue';
-
-const tableData = ref( [
+// 供应商列表数据
+const tableData = ref([
     {
-    id:2103972301201,
-    coding: 40999999911,
-    attribute: '外部',
-    group: '商超',
-    name: '1111111111111111111',
-    remark: '我带我活动i啊我都i啊我活动kkkk',
-    type: '公司',
-    organization: '北京分公司',
-    abbreviation: '加剋夫',
-            addresses: [
-                {
-                id:2103972001,
-                address: '美团一仓',
-                contact: '杨丽',
-                phone: '13251175885',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            },
-                {
-                 id:2103972002,
-                address: '美团二仓',
-                contact: '嘉豪',
-                phone: '1532478232',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-                },
-            {
-                 id:2103972013,
-                address: '美团十三仓',
-                contact: '嘉豪',
-                phone: '1532478232',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            }
-        ]
-  },
-    {
-    id:2103972301202,
-    coding: 40999999912,
-    attribute: '外部',
-    group: '上群',
-    name: '好又多',
-    remark: '备注',
+        coding: 123456789,
+        attribute: '外部',
         type: '公司',
-        organization: '重庆分公司',
-        abbreviation: '好又多',
-             addresses: [
-                 {
-                 id:2103972003,
-                address: '美团三仓',
-                contact: '帅哥',
-                phone: '13251175885',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            }
-        ]
-  },
+        organization: '北京分公司',
+        name: '1111111111111111111',
+        abbreviation: '加剋夫',
+        phone: '13251175885',
+        remark: '我带我活动i啊我都i啊我活动kkkk',
+        addresses: [{
+            house: '美国',
+            address: '美团一仓',
+        }]
+    },
     {
-    id:2103972301203,
-    coding: 40999999913,
-    attribute: '内部',
-    group: '社群',
-    name: '中百大潮',
-    remark: '备注',
-    type: '个人',
-    organization: '四川分公司',
-        abbreviation: '中百大潮',
-            addresses: [
-                {
-                 id:2103972004,
-                address: '美团五仓',
-                contact: '杨丽',
-                phone: '13251175885',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            },
-                {
-                 id:2103972005,
-                address: '美团六仓',
-                contact: '嘉豪',
-                phone: '1532478232',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            }
-        ]
-  },
+        coding: 123456789,
+        attribute: '外部',
+        type: '公司',
+        organization: '北京分公司',
+        name: '1111111111111111111',
+        abbreviation: '加剋夫',
+        phone: '13251175885',
+        remark: '我带我活动i啊我都i啊我活动kkkk',
+        addresses: [{
+        house: '11栋',
+        address: '重庆',
+        }]
+    },
     {
-    id:2103972301204,
-    coding: 40999999914,
-    attribute: '内部',
-    group: '团建',
-    name: '加号团建',
-    remark: '备注',
-    type: '公司',
-    organization: '上海分公司',
-        abbreviation: '加号团建',
-        addresses: [
-            {
-                 id:2103972006,
-                address: '美团七仓',
-                contact: '杨丽',
-                phone: '13251175885',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            },
-            {
-                 id:2103972007,
-                address: '美团八仓',
-                contact: '嘉豪',
-                phone: '1532478232',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            }
-        ]
-  },
+        coding: 123456789,
+        attribute: '外部',
+        type: '公司',
+        organization: '北京分公司',
+        name: '1111111111111111111',
+        abbreviation: '加剋夫',
+        phone: '13251175885',
+
+        remark: '我带我活动i啊我都i啊我活动kkkk',
+        addresses: [{
+        house: '12栋',
+        address: '北京',
+        }]
+    },
     {
-    id:2103972301205,
-    coding: 40999999915,
-    attribute: '内部',
-    group: '社群',
-    name: '重庆批发',
-    remark: '备注',
-    type: '个人',
-    organization: '南京分公司',
-        abbreviation: '中百大潮',
-             addresses: [
-                 {
-                 id:2103972008,
-                address: '美团九仓',
-                contact: '杨丽',
-                phone: '13251175885',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            },
-                 {
-                 id:2103972009,
-                address: '美团十仓',
-                contact: '嘉豪',
-                phone: '1532478232',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            }
-        ]
-  },
+        coding: 123456789,
+        attribute: '外部',
+        type: '公司',
+        organization: '北京分公司',
+        name: '1111111111111111111',
+        abbreviation: '加剋夫',
+        phone: '13251175885',
+        remark: '我带我活动i啊我都i啊我活动kkkk',
+        addresses: [{
+        house: '13栋',
+        address: '上海',
+        }]
+
+    },
     {
-    id: 2103972301206,
-    coding: 40999999916,
-    attribute: '内部',
-    group: '社群',
-    name: '重庆批发',
-    remark: '备注',
-    type: '个人',
-    organization: '河北分公司',
-        abbreviation: '中百大潮',
-             addresses: [
-                 {
-                 id:2103972010,
-                address: '美团十一仓',
-                contact: '杨丽',
-                phone: '13251175885',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            },
-                 {
-                 id:2103972011,
-                address: '美团十二仓',
-                contact: '嘉豪',
-                phone: '1532478232',
-                region: '重庆市 市辖区 渝北区',
-                detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
-            }
-        ]
+        coding: 123456789,
+        attribute: '外部',
+        type: '公司',
+        organization: '北京分公司',
+        name: '1111111111111111111',
+        abbreviation: '加剋夫',
+        phone: '13251175885',
+        remark: '我带我活动i啊我都i啊我活动kkkk',
+        addresses: [{
+        house: '14栋',
+        address: '广州',
+        }]
+    },
+    {
+        coding: 123456789,
+        attribute: '外部',
+        type: '公司',
+        organization: '北京分公司',
+        name: '1111111111111111111',
+        abbreviation: '加剋夫',
+        phone: '13251175885',
+        remark: '我带我活动i啊我都i啊我活动kkkk',
+        addresses: [{
+        house: '15栋',
+        address: '南京',
+        }]
   },
 ])
+// 定义接口
+interface customerData1 {
+coding: number,
+attribute: string,
+type: string,
+organization: string,
+name: string,
+abbreviation: string,
+phone: string,
+remark: string,
+    addresses: {
+        address: string,
+        house: string,
+    }[]
+}
+interface Address {
+    house: string,
+    address: string
 
+}
+const currentAddresses = ref<Address[]>([])
+
+const subinStance = ref() // 子组件实例
 const total = ref(0) // 总数
 const currentPage = ref(1)  // 当前页码
 const pageSize = ref(5)    // 每页条数
+// 查询表单
 const formInline = reactive({
   attribute: '',
   type: '',
   name: '',
   abbreviation: '',
 })
+// 配送地址弹窗
 const showDialog = ref(false)
-
-interface customerData1 {
-    id: number
-    coding:number
-    attribute: string
-    type: string
-    group: string
-    name: string
-    remark: string
-    organization: string
-    abbreviation: string
-    addresses: {
-        id: number
-        address: string
-        contact: string
-        phone: string
-        region: string
-        detailedAddress: string
-    }[]
-}
-
-const currentAddresses = ref<{
-    id: number;
-    address: string;
-    contact: string;
-    phone: string;
-    region: string;
-    detailedAddress: string
-}[]>([])
 
 // 调用分页
 onMounted(() => {
     onSubmit()
 })
-
+// 重置表单
 const reset = () => { 
     Object.assign(formInline, {
     attribute: '',
@@ -332,19 +230,27 @@ const reset = () => {
     currentPage.value = 1
     onSubmit()
 }
-
+const handleAddData = (data: customerData1) => { 
+    tableData.value.unshift(data)
+    // onSubmit()
+}
+// 导出数据
 const exportData = () => { }
-
-const addCustomer = () => { }
-
-const viewAddress = (row: customerData1) => {
-    currentAddresses.value = row.addresses
-    showDialog.value = true
+// 新增供应商弹窗
+const addCustomer = () => {
+   subinStance.value.open()
  }
+// 查看地址
+const viewAddress = (row: customerData1) => {
+    currentAddresses.value = row.addresses 
+    console.log(row.addresses)
+    // console.log(currentAddresses.value)
+    showDialog.value = true
+}
+ // 编辑供应商
 const Edit = (row: customerData1) => { 
     console.log(row)
 }
-
 // 保存原始数据
 const originTableData = ref<customerData1[]>([...tableData.value])
 // 查询表单
@@ -430,22 +336,6 @@ const handlePageChange = (page: number) => {
 }
 
 .Receivingaddress {
-    margin-top: 16px;
-}
-
-.Contact {
-    margin-top: 16px;
-}
-
-.Contactnumber {
-    margin-top: 16px;
-}
-
-.Location {
-    margin-top: 16px;
-}
-
-.detailedaddress {
     margin-top: 16px;
 }
 

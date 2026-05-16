@@ -360,7 +360,7 @@ const Edit = (row:customerData1) => {
 }
 // 新增
 const handleAddData = (data: customerData1) => {
-    console.log(data);
+    // console.log(data);
     tableData.value.unshift(data)
     originTableData.value.unshift(data)
     onSubmit()
