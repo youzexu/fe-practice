@@ -361,7 +361,7 @@ const Edit = (row:customerData1) => {
 // 新增
 const handleAddData = (data: customerData1) => {
     // console.log(data);
-    tableData.value.unshift(data)
+    // tableData.value.unshift(data)
     originTableData.value.unshift(data)
     onSubmit()
 }
@@ -404,7 +404,7 @@ const handleEditData = (data: customerData1) => {
     if (index !== -1) {
         tableData.value[index] = { ...tableData.value[index], ...data }
     }
-    console.log(data);
+    // console.log(data);
 }
 // 导出数据
 const exportData = () => { 

@@ -67,10 +67,10 @@
                <span>收货信息</span>
             </div>
             <div class="Receivingaddress">
-               <span>配送收货地址名称：{{ currentAddresses[0]?.address }}</span>
+               <span>配送收货地址名称：{{ currentAddresses?.address }}</span>
             </div>
            <div class="Receivingaddress">
-                <span>门牌号：{{ currentAddresses[0]?.house }}</span>
+               <span>门牌号：{{ currentAddresses?.house }}</span>
             </div>
             <el-divider />
             <el-row type="flex" justify="end" align="middle">
@@ -80,7 +80,7 @@
             </el-row>
         </el-dialog>
     </div>
-   <Add-supplier ref="subinStance" @addCustomer="handleAddData" />
+   <Add-supplier ref="subinStance" @addCustomer="handleAddData" @editCustomer="handleEditData" />
 </template>
 
 
@@ -91,6 +91,7 @@ import { ref, reactive, onMounted } from 'vue';
 // 供应商列表数据
 const tableData = ref([
     {
+        id:12412414111,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -99,12 +100,12 @@ const tableData = ref([
         abbreviation: '加剋夫',
         phone: '13251175885',
         remark: '我带我活动i啊我都i啊我活动kkkk',
-        addresses: [{
-            house: '美国',
-            address: '美团一仓',
-        }]
+        house: '美国',
+        address: '美团一仓',
+
     },
     {
+          id:12412414112,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -113,12 +114,11 @@ const tableData = ref([
         abbreviation: '加剋夫',
         phone: '13251175885',
         remark: '我带我活动i啊我都i啊我活动kkkk',
-        addresses: [{
         house: '11栋',
         address: '重庆',
-        }]
     },
     {
+          id:12412414113,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -126,14 +126,12 @@ const tableData = ref([
         name: '1111111111111111111',
         abbreviation: '加剋夫',
         phone: '13251175885',
-
         remark: '我带我活动i啊我都i啊我活动kkkk',
-        addresses: [{
         house: '12栋',
         address: '北京',
-        }]
     },
     {
+          id:12412414114,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -142,13 +140,11 @@ const tableData = ref([
         abbreviation: '加剋夫',
         phone: '13251175885',
         remark: '我带我活动i啊我都i啊我活动kkkk',
-        addresses: [{
         house: '13栋',
         address: '上海',
-        }]
-
     },
     {
+          id:12412414115,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -157,12 +153,11 @@ const tableData = ref([
         abbreviation: '加剋夫',
         phone: '13251175885',
         remark: '我带我活动i啊我都i啊我活动kkkk',
-        addresses: [{
         house: '14栋',
         address: '广州',
-        }]
     },
     {
+          id:12412414116,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -171,14 +166,13 @@ const tableData = ref([
         abbreviation: '加剋夫',
         phone: '13251175885',
         remark: '我带我活动i啊我都i啊我活动kkkk',
-        addresses: [{
         house: '15栋',
         address: '南京',
-        }]
   },
 ])
 // 定义接口
 interface customerData1 {
+    id: number,
 coding: number,
 attribute: string,
 type: string,
@@ -187,17 +181,14 @@ name: string,
 abbreviation: string,
 phone: string,
 remark: string,
-    addresses: {
-        address: string,
-        house: string,
-    }[]
+address: string,
+house: string,
 }
-interface Address {
-    house: string,
-    address: string
-
+interface AddressData { 
+address: string,
+house: string,
 }
-const currentAddresses = ref<Address[]>([])
+const currentAddresses = ref<AddressData>()
 
 const subinStance = ref() // 子组件实例
 const total = ref(0) // 总数
@@ -230,9 +221,20 @@ const reset = () => {
     currentPage.value = 1
     onSubmit()
 }
+// 新增供应商
 const handleAddData = (data: customerData1) => { 
-    tableData.value.unshift(data)
-    // onSubmit()
+    console.log(data)
+    originTableData.value.unshift(data)
+    onSubmit()
+}
+// 编辑供应商
+const handleEditData = (data: customerData1) => {
+    // console.log(data)
+        const index = originTableData.value.findIndex(item => item.id === data.id)
+    if (index !== -1) {
+        originTableData.value[index] = { ...originTableData.value[index], ...data }
+    }
+    onSubmit()
 }
 // 导出数据
 const exportData = () => { }
@@ -242,14 +244,18 @@ const addCustomer = () => {
  }
 // 查看地址
 const viewAddress = (row: customerData1) => {
-    currentAddresses.value = row.addresses 
-    console.log(row.addresses)
+    currentAddresses.value = {
+        address : row.address,
+        house : row.house
+    }
+    // console.log(row.address)
     // console.log(currentAddresses.value)
     showDialog.value = true
 }
- // 编辑供应商
-const Edit = (row: customerData1) => { 
-    console.log(row)
+ // 打开编辑弹窗
+const Edit = (row: AddressData) => { 
+    subinStance.value.openEdit(row)
+    // console.log(row)
 }
 // 保存原始数据
 const originTableData = ref<customerData1[]>([...tableData.value])

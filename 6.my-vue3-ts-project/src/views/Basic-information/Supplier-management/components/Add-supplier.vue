@@ -32,16 +32,11 @@
                 <el-form-item label="联系电话" style="width: 100%;margin-bottom: 24px;" size="small" prop="phone">
                     <el-input placeholder="请输入" v-model="formList1.phone" type="number" />
                 </el-form-item>
-                <el-form-item label="供应商地址" size="small" prop="address">
-                    <div v-if="formList1.addresses[0]" style="width: 100%;">
-                        <el-input v-model="formList1.addresses[0].address" placeholder="请输入地址" />
-                    </div>
+               <el-form-item label="供应商地址" style="width: 100%" size="small" prop="address">
+                    <el-input v-model="formList1.address" placeholder="请输入地址" />
                 </el-form-item>
-                <el-form-item label="门牌号" size="small" prop="house">
-                    <div v-if="formList1.addresses[0]" style="width: 100%;">
-                        <el-input v-model="formList1.addresses[0].house" placeholder="请输入门牌号(50字以内)" type="textarea"
-                            :rows="2" />
-                    </div>
+               <el-form-item label="门牌号" style="width: 100%" size="small" prop="house">
+                    <el-input v-model="formList1.house" placeholder="请输入门牌号(50字以内)" type="textarea" :rows="2" />
                 </el-form-item>
                 <el-form-item label="备注" style="width: 100%;margin-bottom: 24px;" size="small" prop="remark">
                     <el-input type="textarea" :rows="2" placeholder="请填写备注信息 (200字以内)" v-model="formList1.remark" />
@@ -59,7 +54,9 @@
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 
+// 定义接口
 interface customerData {
+id: number,
 coding: number,
 attribute: string,
 type: string,
@@ -68,14 +65,16 @@ name: string,
 abbreviation: string,
 phone: string,
 remark: string,
-    addresses: {
-    address: string,
-    house: string,
-    }[]
+address: string,
+house: string,
 }
+
+let id =21342414123
 let coding = 40999999917
 const formOne = ref();
+// 新增表单数据
 const formList1 = reactive<customerData>({
+id:id++,
 coding: coding++,
 attribute: '',
 type: '',
@@ -84,33 +83,72 @@ name: '',
 phone: '',
 abbreviation: '',
 remark: '',
-    addresses: [{
-    address:'' ,
-    house:'',
-    }]
+address:'' ,
+house:'',
 });
-const showHide = ref<boolean>(false)
-
-const open = () => { 
-    showHide.value = true;
+const clearForm = () => { 
+formList1.id = 0
+formList1.coding = coding++
+formList1.attribute = ''
+formList1.type = ''
+formList1.organization = ''
+formList1.name = ''
+formList1.phone = ''
+formList1.abbreviation = ''
+formList1.remark = ''
+formList1.address = ''
+formList1.house = ''
 }
+// 弹窗状态
+const showHide = ref<boolean>(false)
+// 打开编辑弹窗
+const openEdit = (data: customerData) => { 
+    Object.assign(formList1, data)
+    showHide.value = true;
+// console.log(data)
+} 
+// 父组件打开弹窗
+const open = () => { 
+    clearForm()
+    showHide.value = true;
+
+}
+// 传递表单数据
 const emit = defineEmits<{
      (e: 'addCustomer', data: customerData): void
      (e: 'editCustomer', data: customerData): void
 }>()
+// 表单提交
 const btnOk = () => { 
     formOne.value.validate((valid: boolean) => { 
-        if (valid) {           
-            emit('addCustomer', formList1)
+        if (valid) {
+            if (formList1.id === 0) {
+                const submitData = JSON.parse(JSON.stringify(formList1)) 
+                submitData.id = id++
+                submitData.coding = coding++
+            emit('addCustomer', submitData)
+            // console.log(submitData)
             showHide.value = false;
-            ElMessage.success('添加成功')
+                ElMessage.success('添加成功')
+                // clearForm()
+            }
+            else {
+                const editData = JSON.parse(JSON.stringify(formList1)) 
+                emit('editCustomer',editData)
+                // console.log(editData)
+                showHide.value = false;
+                ElMessage.success('编辑成功')
+                clearForm()
+             }
         } else { 
              ElMessage.error('请填写完整信息')
         }
     })
 }
+// 弹窗取消
 const btnCancel = () => { 
     formOne.value.resetFields();
+    clearForm()
     showHide.value = false;
     
 }
@@ -137,7 +175,7 @@ const rules = reactive({
     ]
 })
 
-defineExpose({open})
+defineExpose({open, openEdit})
 
 </script>
 
