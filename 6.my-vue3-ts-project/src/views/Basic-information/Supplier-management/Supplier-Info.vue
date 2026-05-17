@@ -94,7 +94,7 @@ const tableData = ref([
         id:12412414111,
         coding: 123456789,
         attribute: '外部',
-        type: '公司',
+        type: '水果',
         organization: '北京分公司',
         name: '1111111111111111111',
         abbreviation: '加剋夫',

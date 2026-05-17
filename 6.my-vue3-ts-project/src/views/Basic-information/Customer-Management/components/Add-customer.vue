@@ -1,6 +1,7 @@
 <template>
     <div>
        <el-dialog v-model="dialogVisible" :title="showTitle" width="520" @close="btnCancel">
+           <el-divider style="margin-top: 10px; margin-bottom: 24xp;" />
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
                 ref="formOne" :rules="rules">
                <el-form-item :label="formList1.id !== 0 ? `客户属性: ${formList1.attribute}` : '客户属性'"
@@ -46,7 +47,7 @@
                     <el-input type="textarea" :rows="2" placeholder="请填写备注信息 (200字以内)" v-model="formList1.remark" />
                 </el-form-item>
             </el-form>
-            <div class="harvestinformation">
+           <div class="harvestinformation">
                 <span class="span1">|</span>
                 <span>收货信息</span>
             </div>
@@ -85,10 +86,11 @@
                     </div>
                 </el-form>
             </div>
-            <el-row type="flex" justify="center" align="middle">
+           <el-row type="flex" justify="center" align="middle">
                 <el-button size="small" style="width: 100%; border: 1px dashed #ccc;" @click="addForm">+ 新增</el-button>
             </el-row>
-            <el-row type="flex" justify="end" align="middle" style="margin-top: 24px;">
+           <el-divider style="margin: 24px 0 8px 0" />
+            <el-row type="flex" justify="end" align="middle">
                 <el-button type="primary" size="small" @click="btnOk">确定</el-button>
                 <el-button size="small" @click="btnCancel">取消</el-button>
             </el-row>

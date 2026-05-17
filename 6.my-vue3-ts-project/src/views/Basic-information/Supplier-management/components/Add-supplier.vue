@@ -1,21 +1,28 @@
 <template>
     <div>
-        <el-dialog v-model="showHide" width="520" @close="btnCancel">
+       <el-dialog v-model="showHide" :title="showTitle" width="520" @close="btnCancel">
+            <el-divider style="margin-top: 10px; margin-bottom: 24xp;" />
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
                 ref="formOne" :rules="rules">
-                <el-form-item label="供应商属性" style="width: 100%; margin-bottom: 24px;" size="small" prop="attribute">
-                    <el-select placeholder="请选择" v-model="formList1.attribute">
+               <el-form-item :label="formList1.id !== 0 ? `供应商属性: ${formList1.attribute}供应商` : '供应商属性'"
+                    style="width: 100%; margin-bottom: 24px;" size="small" prop="attribute">
+                    <el-select v-if="formList1.id === 0" placeholder="请选择" v-model="formList1.attribute">
                         <el-option label="内部" value="内部"></el-option>
                         <el-option label="外部" value="外部"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="供应商类型" style="width: 100%; margin-bottom: 24px;" size="small" prop="type">
-                    <el-select placeholder="请选择" v-model="formList1.type">
+               <el-form-item :label="formList1.id !== 0 ? `供应商类型: ${formList1.type}` : '供应商类型'"
+                    style="width: 100%; margin-bottom: 24px;" size="small" prop="type">
+                    <el-select v-if="formList1.id === 0" placeholder="请选择" v-model="formList1.type">
                         <el-option label="苹果" value="苹果"></el-option>
                         <el-option label="香蕉" value="香蕉"></el-option>
                         <el-option label="橘子" value="橘子"></el-option>
                         <el-option label="葡萄" value="葡萄"></el-option>
                     </el-select>
+                </el-form-item>
+               <el-form-item v-if="formList1.id !== 0" label="供应商财务编码" style="width: 100%;margin-bottom: 24px;"
+                    size="small" prop="coding">
+                    <el-input placeholder="请输入" v-model="formList1.coding" />
                 </el-form-item>
                 <el-form-item label="客户所属组织" style="width: 100%;margin-bottom: 24px;" size="small" prop="organization">
                     <el-select placeholder="请选择" v-model="formList1.organization">
@@ -42,7 +49,8 @@
                     <el-input type="textarea" :rows="2" placeholder="请填写备注信息 (200字以内)" v-model="formList1.remark" />
                 </el-form-item>
             </el-form>
-            <el-row type="flex" justify="end" align="middle" style="margin-top: 24px;">
+           <el-divider style="margin: 24px 0 8px 0" />
+            <el-row type="flex" justify="end" align="middle">
                 <el-button type="primary" size="small" @click="btnOk">确定</el-button>
                 <el-button size="small" @click="btnCancel">取消</el-button>
             </el-row>
@@ -52,7 +60,7 @@
 
 <script setup lang="ts" name="AddSupplier">
 import { ElMessage } from 'element-plus';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 // 定义接口
 interface customerData {
@@ -72,6 +80,9 @@ house: string,
 let id =21342414123
 let coding = 40999999917
 const formOne = ref();
+const showTitle = computed(() => {
+    return formList1.id !== 0 ? '编辑供应商' : '新增供应商'
+ })
 // 新增表单数据
 const formList1 = reactive<customerData>({
 id:id++,
@@ -86,6 +97,7 @@ remark: '',
 address:'' ,
 house:'',
 });
+// 清空表单数据
 const clearForm = () => { 
 formList1.id = 0
 formList1.coding = coding++
@@ -111,7 +123,6 @@ const openEdit = (data: customerData) => {
 const open = () => { 
     clearForm()
     showHide.value = true;
-
 }
 // 传递表单数据
 const emit = defineEmits<{
@@ -125,20 +136,17 @@ const btnOk = () => {
             if (formList1.id === 0) {
                 const submitData = JSON.parse(JSON.stringify(formList1)) 
                 submitData.id = id++
-                submitData.coding = coding++
             emit('addCustomer', submitData)
             // console.log(submitData)
             showHide.value = false;
                 ElMessage.success('添加成功')
-                // clearForm()
             }
             else {
                 const editData = JSON.parse(JSON.stringify(formList1)) 
                 emit('editCustomer',editData)
                 // console.log(editData)
                 showHide.value = false;
-                ElMessage.success('编辑成功')
-                clearForm()
+                ElMessage.success('编辑成功')              
              }
         } else { 
              ElMessage.error('请填写完整信息')
@@ -147,10 +155,9 @@ const btnOk = () => {
 }
 // 弹窗取消
 const btnCancel = () => { 
+    showHide.value = false;
     formOne.value.resetFields();
     clearForm()
-    showHide.value = false;
-    
 }
 // 表单验证规则
 const rules = reactive({
@@ -159,6 +166,7 @@ const rules = reactive({
     organization: [{ required: true, message: '请选择客户所属组织', trigger: 'blur' }],
     name: [{ required: true, message: '请输入供应商名称', trigger: 'blur' }],
     abbreviation: [{ required: true, message: '请输入供应商简称', trigger: 'blur' }],
+    coding: [{ required: true, message: '请输入供应商财务编码', trigger: 'blur' }],
     phone: [
         { required: true, message: '请输入联系人电话', trigger: 'blur' },
         // {  pattern: /^1[3-9]\d{9}$/, message: '电话格式不正确', trigger: 'blur' },
