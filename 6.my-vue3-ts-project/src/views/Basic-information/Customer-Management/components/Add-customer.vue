@@ -99,12 +99,12 @@
 </template>
 
 
-<script setup lang="ts" name="AddCustomer">
+<script setup lang="ts" name="addCustomer">
 import { ref, reactive, computed, } from 'vue';
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 // 规范数据
-interface customerData {
+interface CustomerData {
     id: number
     coding: number
     attribute: string
@@ -128,7 +128,7 @@ let nextId1 = 2103972301206
 let coding = 40999999917
 let nextId = 1
 // 组件数据
-const formList1 = reactive<customerData>({
+const formList1 = reactive<CustomerData>({
     id:0,
     attribute: '',
     type: '',
@@ -163,7 +163,7 @@ const addForm = () => {
 // 弹窗状态
 const dialogVisible = ref(false);
 // 备份数据（用于取消时恢复）
-let backupFormData: customerData | null = null
+let backupFormData: CustomerData | null = null
 const backupData = () => {
     backupFormData = JSON.parse(JSON.stringify(formList1))
 }
@@ -210,7 +210,7 @@ const clearForm = () => {
         }]
 }
 // 打开编辑弹窗
-const openEdit = (data: customerData) => {
+const openEdit = (data: CustomerData) => {
     Object.assign(formList1, {
         id: data.id || 0,
         coding: data.coding || 0,
@@ -245,8 +245,8 @@ const formOne = ref()
 const addressForm = ref<FormInstance[]>([])
 // 自定义添加编辑事件
 const emit = defineEmits<{
-     (e: 'addCustomer', data: customerData): void
-     (e: 'editCustomer', data: customerData): void
+     (e: 'addCustomer', data: CustomerData): void
+     (e: 'editCustomer', data: CustomerData): void
 }>()
 // 确定按钮事件
 const btnOk = async () => {
@@ -258,15 +258,15 @@ const btnOk = async () => {
         await Promise.all(validations)
         if (formList1.id !== 0) { 
         const editData = JSON.parse(JSON.stringify(formList1))
-        emit('editCustomer', editData)
-        ElMessage.success('编辑成功')
+            emit('editCustomer', editData)
+            ElMessage.success('编辑成功')
         } else {
         const newData = JSON.parse(JSON.stringify(formList1))
-        newData.id = nextId1++   
-        newData.coding = coding++ 
-        emit('addCustomer',newData)
+            newData.id = nextId1++   
+            newData.coding = coding++ 
+            emit('addCustomer',newData)
             // console.log(formList1);
-        ElMessage.success('添加成功')
+            ElMessage.success('添加成功')
         }
         formOne.value?.resetFields()
         addressForm.value.forEach(form => form?.resetFields())

@@ -5,7 +5,7 @@
 </template>
 
 
-<script setup lang="ts" name="conversion-info">
+<script setup lang="ts" name="conversionInfo">
 import { ref } from 'vue';
 const massigr = ref('收入审批');
 </script>

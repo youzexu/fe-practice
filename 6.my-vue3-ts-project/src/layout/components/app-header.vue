@@ -10,7 +10,7 @@
     </div>
 </template>
 
-<script setup lang="ts" name="AppHeader">
+<script setup lang="ts" name="appHeader">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 

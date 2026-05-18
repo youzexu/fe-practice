@@ -100,16 +100,16 @@
 </template>
 
 
-<script setup lang="ts" name="Customer-Info">
+<script setup lang="ts" name="customerInfo">
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import AddCustomer from './components/Add-customer.vue'
+import AddCustomer from './components/add-customer.vue'
 import { onMounted, reactive, ref } from 'vue';
 // 调用分页
 onMounted(() => {
     onSubmit()
 })
 // 规范化数据接口
-interface customerData1 {
+interface CustomerData1 {
     id: number
     coding:number
     attribute: string
@@ -346,7 +346,7 @@ const reset = () => {
     onSubmit()
 }
 // 打开查询地址表单
-const viewAddress = (row:customerData1) => {
+const viewAddress = (row:CustomerData1) => {
     currentAddresses.value = row.addresses
     showDialog.value = true
 }
@@ -355,18 +355,18 @@ const addCustomer = () => {
     subinStance.value.open()
 }
 // 子组件编辑
-const Edit = (row:customerData1) => {
+const Edit = (row:CustomerData1) => {
     subinStance.value.openEdit(row)
 }
 // 新增
-const handleAddData = (data: customerData1) => {
+const handleAddData = (data: CustomerData1) => {
     // console.log(data);
     // tableData.value.unshift(data)
     originTableData.value.unshift(data)
     onSubmit()
 }
 // 保存原始数据
-const originTableData = ref<customerData1[]>([...tableData.value])
+const originTableData = ref<CustomerData1[]>([...tableData.value])
 // 查询表单
 const onSubmit = () => {
     // 筛选数据
@@ -399,7 +399,7 @@ const handlePageChange = (page: number) => {
     onSubmit()
 }
 // 编辑
-const handleEditData = (data: customerData1) => {
+const handleEditData = (data: CustomerData1) => {
     const index = tableData.value.findIndex(item => item.id === data.id)
     if (index !== -1) {
         tableData.value[index] = { ...tableData.value[index], ...data }

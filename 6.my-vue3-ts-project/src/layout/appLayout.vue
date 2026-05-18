@@ -1,19 +1,19 @@
 <template>
   <div class="layout">
-   <TopBar v-model:collapse="isCollapsed" />
+    <topBar v-model:collapse="isCollapsed" />
     <div class="main-wrapper">
-     <LeftSidebar v-model:collapse="isCollapsed" />
+      <leftSidebar v-model:collapse="isCollapsed" />
       <div class="content-wrapper">
-        <AppMain />
+        <appMain />
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts" name="Layout">
+<script setup lang="ts" name="appLayout">
 import TopBar from './components/top-bar.vue'
 import LeftSidebar from './components/left-sidebar.vue'
-import AppMain from './components/App-Main.vue'
+import AppMain from './components/app-main.vue'
 import { ref } from 'vue';
 
 const isCollapsed = ref(false)
@@ -51,7 +51,9 @@ const isCollapsed = ref(false)
   box-sizing: border-box;
 }
 
-html, body, #app {
+html,
+body,
+#app {
   width: 100%;
   height: 100%;
 }

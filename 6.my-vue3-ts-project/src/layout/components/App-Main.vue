@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="AppMain">
+<script setup lang="ts" name="appMain">
 import AppHeader from './app-header.vue'
 
 

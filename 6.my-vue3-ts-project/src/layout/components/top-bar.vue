@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="TopBar">
+<script setup lang="ts" name="topBar">
 import { Fold, Expand } from '@element-plus/icons-vue'
 
 const props = defineProps<{

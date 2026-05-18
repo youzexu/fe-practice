@@ -5,7 +5,7 @@
 </template>
 
 
-<script setup lang="ts" name="Team-Info">
+<script setup lang="ts" name="teamInfo">
 import { ref } from 'vue';
 const massigr = ref('团队管理');
 </script>

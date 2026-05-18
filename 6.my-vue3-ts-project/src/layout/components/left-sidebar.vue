@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script lang="ts" setup name="LeftSidebar">
+<script lang="ts" setup name="leftSidebar">
 import router from '@/router';
 import { computed } from 'vue';
 

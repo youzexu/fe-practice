@@ -58,23 +58,23 @@
     </div>
 </template>
 
-<script setup lang="ts" name="AddSupplier">
+<script setup lang="ts" name="addSupplier">
 import { ElMessage } from 'element-plus';
 import { computed, reactive, ref } from 'vue';
 
 // 定义接口
-interface customerData {
-id: number,
-coding: number,
-attribute: string,
-type: string,
-organization: string,
-name: string,
-abbreviation: string,
-phone: string,
-remark: string,
-address: string,
-house: string,
+interface CustomerData {
+    id: number;
+    coding: number;
+    attribute: string;
+    type: string;
+    organization: string;
+    name: string;
+    abbreviation: string;
+    phone: string;
+    remark: string;
+    address: string;
+    house: string;
 }
 
 let id =21342414123
@@ -84,37 +84,36 @@ const showTitle = computed(() => {
     return formList1.id !== 0 ? '编辑供应商' : '新增供应商'
  })
 // 新增表单数据
-const formList1 = reactive<customerData>({
-id:id++,
-coding: coding++,
-attribute: '',
-type: '',
-organization: '',
-name: '',
-phone: '',
-abbreviation: '',
-remark: '',
-address:'' ,
-house:'',
+const formList1 = reactive<CustomerData>({ 
+    id:id++,
+    coding: coding++,
+    attribute: '',
+    type: '',
+    organization: '',
+    name: '',    
+    phone: '',
+    abbreviation: '',
+    remark: '',
+    address:'' ,
+    house:'',
 });
 // 清空表单数据
 const clearForm = () => { 
-formList1.id = 0
-formList1.coding = coding++
-formList1.attribute = ''
-formList1.type = ''
-formList1.organization = ''
-formList1.name = ''
-formList1.phone = ''
-formList1.abbreviation = ''
-formList1.remark = ''
-formList1.address = ''
-formList1.house = ''
+    formList1.id = 0
+    formList1.coding = coding++
+    formList1.attribute = ''
+    formList1.type = ''
+    formList1.organization = ''
+    formList1.phone = ''
+    formList1.abbreviation = ''
+    formList1.remark = ''
+    formList1.address = ''
+    formList1.house = ''
 }
 // 弹窗状态
 const showHide = ref<boolean>(false)
 // 打开编辑弹窗
-const openEdit = (data: customerData) => { 
+const openEdit = (data: CustomerData) => { 
     Object.assign(formList1, data)
     showHide.value = true;
 // console.log(data)
@@ -126,8 +125,8 @@ const open = () => {
 }
 // 传递表单数据
 const emit = defineEmits<{
-     (e: 'addCustomer', data: customerData): void
-     (e: 'editCustomer', data: customerData): void
+     (e: 'addCustomer', data: CustomerData): void
+     (e: 'editCustomer', data: CustomerData): void
 }>()
 // 表单提交
 const btnOk = () => { 

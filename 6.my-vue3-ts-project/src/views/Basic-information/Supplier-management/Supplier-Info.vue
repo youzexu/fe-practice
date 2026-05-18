@@ -84,8 +84,8 @@
 </template>
 
 
-<script setup lang="ts" name="Supplier-Info">
-import AddSupplier from './components/Add-supplier.vue';
+<script setup lang="ts" name="supplierInfo">
+import AddSupplier from './components/add-supplier.vue';
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { ref, reactive, onMounted } from 'vue';
 // 供应商列表数据
@@ -171,7 +171,7 @@ const tableData = ref([
   },
 ])
 // 定义接口
-interface customerData1 {
+interface CustomerData1 {
     id: number,
 coding: number,
 attribute: string,
@@ -221,13 +221,13 @@ const reset = () => {
     onSubmit()
 }
 // 新增供应商
-const handleAddData = (data: customerData1) => { 
+const handleAddData = (data: CustomerData1) => { 
     console.log(data)
     originTableData.value.unshift(data)
     onSubmit()
 }
 // 编辑供应商
-const handleEditData = (data: customerData1) => {
+const handleEditData = (data: CustomerData1) => {
     // console.log(data)
         const index = originTableData.value.findIndex(item => item.id === data.id)
     if (index !== -1) {
@@ -242,7 +242,7 @@ const addCustomer = () => {
    subinStance.value.open()
  }
 // 查看地址
-const viewAddress = (row: customerData1) => {
+const viewAddress = (row: CustomerData1) => {
     currentAddresses.value = {
         address : row.address,
         house : row.house
@@ -257,7 +257,7 @@ const Edit = (row: AddressData) => {
     // console.log(row)
 }
 // 保存原始数据
-const originTableData = ref<customerData1[]>([...tableData.value])
+const originTableData = ref<CustomerData1[]>([...tableData.value])
 // 查询表单
 const onSubmit = () => {
     // 筛选数据
