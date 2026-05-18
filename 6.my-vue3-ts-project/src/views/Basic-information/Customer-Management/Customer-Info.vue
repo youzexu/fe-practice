@@ -56,7 +56,7 @@
                 </el-table-column>
             </el-table>
            <!-- 分页 -->
-           <el-row type="flex" justify="end" align="middle" style="margin-top: 16px;">
+            <el-row type="flex" justify="end" align="middle" style="margin-top: 16px;">
                 <el-pagination :locale="zhCn" v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[1, 2, 5, 10]" :total="total" size="small" background
                     layout="total, sizes, prev, pager, next, jumper" @current-change="handlePageChange"
@@ -65,8 +65,8 @@
         </div>
         <!-- 查看配送地址 -->
        <el-dialog v-model="showDialog" title="查看配送地址" width="500">
-           <el-divider />
-           <div v-for="(value, index) in currentAddresses" :key="value.id">
+            <el-divider />
+            <div v-for="(value, index) in currentAddresses" :key="value.id">
                 <div class="harvestinformation">
                     <span class="span1">| </span>
                    <span>收货信息{{ index + 1 }}</span>
@@ -431,7 +431,7 @@ const exportData = () => {
     margin-left: 24px;
     margin-right: 24px;
     flex: 1;
-        overflow-x: auto;
+    overflow-x: auto;
         overflow-y: auto;
         min-height: 0;
 }

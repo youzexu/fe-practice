@@ -1,6 +1,6 @@
 <template>
- <div class="sidebar" :class="{ collapse }">
-   <el-menu router :collapse="collapse" background-color="transparent"
+ <div class="sidebar" :class="{ collapse: appStore.sidebarCollapsed }">
+    <el-menu router :default-active="$route.path" :collapse="appStore.sidebarCollapsed" background-color="transparent"
       text-color="#bfcbd9" active-text-color="#409eff">
      <template v-for="item in menuList" :key="item.path">
         <el-sub-menu v-if="item.children && item.children?.length" :index="item.path">
@@ -27,14 +27,11 @@
 </template>
 
 <script lang="ts" setup name="leftSidebar">
+import { useAppStore } from '@/stores/app';
 import router from '@/router';
 import { computed } from 'vue';
 
-// 折叠菜单
-defineProps<{
-  collapse: boolean
-}>()
-// console.log(router.getRoutes());
+const appStore = useAppStore();
 
 // 获取路由中菜单列表
 const menuList = computed(() => {

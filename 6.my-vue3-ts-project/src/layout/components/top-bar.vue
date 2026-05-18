@@ -16,9 +16,9 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <div class="fold" @click="toggleCollapse">
+     <div class="fold" @click="appStore.toggleSidebar">
         <el-icon>
-          <Fold v-if="!collapse" />
+         <Fold v-if="!appStore.sidebarCollapsed" />
           <Expand v-else />
        </el-icon>
       </div>
@@ -33,19 +33,11 @@
 </template>
 
 <script setup lang="ts" name="topBar">
+import { useAppStore }from '../../stores/app'
 import { Fold, Expand } from '@element-plus/icons-vue'
 
-const props = defineProps<{
-  collapse: boolean
-}>()
+const appStore = useAppStore()
 
-const emit = defineEmits<{
-  (e: 'update:collapse', value: boolean): void
-}>()
-
-const toggleCollapse = () => {
-  emit('update:collapse', !props.collapse)
-}
 </script>
 
 <style scoped>

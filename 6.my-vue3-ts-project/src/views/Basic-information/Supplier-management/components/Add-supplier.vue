@@ -168,8 +168,8 @@ const rules = reactive({
     coding: [{ required: true, message: '请输入供应商财务编码', trigger: 'blur' }],
     phone: [
         { required: true, message: '请输入联系人电话', trigger: 'blur' },
-        // {  pattern: /^1[3-9]\d{9}$/, message: '电话格式不正确', trigger: 'blur' },
-        // { min: 11, max: 11, message: '请输入11位手机号码', trigger: 'blur' }
+        {  pattern: /^1[3-9]\d{9}$/, message: '电话格式不正确', trigger: 'blur' },
+        { min: 11, max: 11, message: '请输入11位手机号码', trigger: 'blur' }
     ],
     address: [{ required: true, message: '请输入供应商地址', trigger: 'blur' }],
     house: [
