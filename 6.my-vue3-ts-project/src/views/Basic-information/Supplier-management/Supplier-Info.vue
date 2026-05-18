@@ -213,7 +213,6 @@ const reset = () => {
     Object.assign(formInline, {
     attribute: '',
     type: '',
-    group: '',
     name: '',
     abbreviation: '',
     })
