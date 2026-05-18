@@ -1,7 +1,7 @@
 <template>
     <div>
-       <el-dialog v-model="dialogVisible" :title="showTitle" width="520" @close="btnCancel">
-           <el-divider style="margin-top: 10px; margin-bottom: 24xp;" />
+       <el-dialog v-model="dialogVisible" :title="showTitle" width="520" @close="handleCancel">
+            <el-divider style="margin-top: 10px; margin-bottom: 24px;" />
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
                 ref="formOne" :rules="rules">
                <el-form-item :label="formList1.id !== 0 ? `客户属性: ${formList1.attribute}` : '客户属性'"
@@ -91,8 +91,8 @@
             </el-row>
            <el-divider style="margin: 24px 0 8px 0" />
             <el-row type="flex" justify="end" align="middle">
-                <el-button type="primary" size="small" @click="btnOk">确定</el-button>
-                <el-button size="small" @click="btnCancel">取消</el-button>
+               <el-button type="primary" size="small" @click="handelSure">确定</el-button>
+                <el-button size="small" @click="handleCancel">取消</el-button>
             </el-row>
         </el-dialog>
     </div>
@@ -162,26 +162,10 @@ const addForm = () => {
 }
 // 弹窗状态
 const dialogVisible = ref(false);
-// 备份数据（用于取消时恢复）
-let backupFormData: CustomerData | null = null
-const backupData = () => {
-    backupFormData = JSON.parse(JSON.stringify(formList1))
-}
-// 恢复数据
-const restoreBackup = () => {
-    if (backupFormData) {
-        Object.assign(formList1, backupFormData)
-        // 更新 nextId
-        if (formList1.addresses.length > 0) {
-            nextId = Math.max(...formList1.addresses.map(a => a.id)) + 1
-        } else {
-            nextId = 1
-        }
-    }
-}
+
 // 打开新增弹窗
 const open = () => {
-    backupFormData = null 
+
     dialogVisible.value = true;
     clearForm()
 }
@@ -211,33 +195,8 @@ const clearForm = () => {
 }
 // 打开编辑弹窗
 const openEdit = (data: CustomerData) => {
-    Object.assign(formList1, {
-        id: data.id || 0,
-        coding: data.coding || 0,
-        attribute: data.attribute || '',
-        type: data.type || '',
-        group: data.group || '',
-        name: data.name || '',
-        remark: data.remark || '',
-        abbreviation: data.abbreviation || '',
-        organization: data.organization || ''
-    })
-    
-    formList1.addresses = data.addresses?.length 
-        ? data.addresses.map((addr) => ({
-            id: nextId++,
-            address: addr.address || '',
-            contact: addr.contact || '',
-            phone: addr.phone || '',
-            region: addr.region || '',
-            detailedAddress: addr.detailedAddress || ''
-        }))
-        : [{ id: nextId, address: '', contact: '', phone: '', region: '', detailedAddress: '' }]
-    
-    backupData()
-    
+    Object.assign(formList1, data)
     dialogVisible.value = true
-    backupFormData = null 
 }
 // 表单验证规则
 const formOne = ref()
@@ -249,7 +208,7 @@ const emit = defineEmits<{
      (e: 'editCustomer', data: CustomerData): void
 }>()
 // 确定按钮事件
-const btnOk = async () => {
+const handelSure = async () => {
     try {
         const validations = [
             formOne.value?.validate(),
@@ -268,18 +227,14 @@ const btnOk = async () => {
             // console.log(formList1);
             ElMessage.success('添加成功')
         }
-        formOne.value?.resetFields()
-        addressForm.value.forEach(form => form?.resetFields())
         dialogVisible.value = false
-        clearForm()
     } catch {
         ElMessage.error('请填写完整信息')
     }
 }
 // 取消按钮事件
-const btnCancel = () => {
+const handleCancel = () => {
     if (formList1.id !== 0) {
-        restoreBackup()
         formOne.value?.clearValidate()
     } else {
         formOne.value?.resetFields()

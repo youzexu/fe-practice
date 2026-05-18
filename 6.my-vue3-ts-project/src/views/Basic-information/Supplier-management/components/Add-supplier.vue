@@ -1,6 +1,6 @@
 <template>
     <div>
-       <el-dialog v-model="showHide" :title="showTitle" width="520" @close="btnCancel">
+       <el-dialog v-model="showHide" :title="showTitle" width="520" @close="handleCancel">
             <el-divider style="margin-top: 10px; margin-bottom: 24xp;" />
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
                 ref="formOne" :rules="rules">
@@ -51,8 +51,8 @@
             </el-form>
            <el-divider style="margin: 24px 0 8px 0" />
             <el-row type="flex" justify="end" align="middle">
-                <el-button type="primary" size="small" @click="btnOk">确定</el-button>
-                <el-button size="small" @click="btnCancel">取消</el-button>
+               <el-button type="primary" size="small" @click="handleSure">确定</el-button>
+                <el-button size="small" @click="handleCancel">取消</el-button>
             </el-row>
         </el-dialog>
     </div>
@@ -103,6 +103,7 @@ const clearForm = () => {
     formList1.coding = coding++
     formList1.attribute = ''
     formList1.type = ''
+    formList1.name = ''
     formList1.organization = ''
     formList1.phone = ''
     formList1.abbreviation = ''
@@ -115,13 +116,13 @@ const showHide = ref<boolean>(false)
 // 打开编辑弹窗
 const openEdit = (data: CustomerData) => { 
     Object.assign(formList1, data)
-    showHide.value = true;
+    showHide.value = true
 // console.log(data)
 } 
 // 父组件打开弹窗
 const open = () => { 
     clearForm()
-    showHide.value = true;
+    showHide.value = true
 }
 // 传递表单数据
 const emit = defineEmits<{
@@ -129,7 +130,7 @@ const emit = defineEmits<{
      (e: 'editCustomer', data: CustomerData): void
 }>()
 // 表单提交
-const btnOk = () => { 
+const handleSure = () => { 
     formOne.value.validate((valid: boolean) => { 
         if (valid) {
             if (formList1.id === 0) {
@@ -137,14 +138,14 @@ const btnOk = () => {
                 submitData.id = id++
             emit('addCustomer', submitData)
             // console.log(submitData)
-            showHide.value = false;
+            showHide.value = false
                 ElMessage.success('添加成功')
             }
             else {
                 const editData = JSON.parse(JSON.stringify(formList1)) 
                 emit('editCustomer',editData)
                 // console.log(editData)
-                showHide.value = false;
+                showHide.value = false
                 ElMessage.success('编辑成功')              
              }
         } else { 
@@ -153,10 +154,9 @@ const btnOk = () => {
     })
 }
 // 弹窗取消
-const btnCancel = () => { 
-    showHide.value = false;
-    formOne.value.resetFields();
-    clearForm()
+const handleCancel = () => { 
+    showHide.value = false
+    formOne.value.resetFields()
 }
 // 表单验证规则
 const rules = reactive({
