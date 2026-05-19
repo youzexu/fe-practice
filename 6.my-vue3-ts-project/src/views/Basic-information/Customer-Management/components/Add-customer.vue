@@ -91,7 +91,7 @@
             </el-row>
            <el-divider style="margin: 24px 0 8px 0" />
             <el-row type="flex" justify="end" align="middle">
-               <el-button type="primary" size="small" @click="handelSure">确定</el-button>
+               <el-button type="primary" size="small" @click="handleSure">确定</el-button>
                 <el-button size="small" @click="handleCancel">取消</el-button>
             </el-row>
         </el-dialog>
@@ -123,10 +123,18 @@ interface CustomerData {
         detailedAddress: string
     }[]
 }
+
 // 全局变量
 let nextId1 = 2103972301206
 let coding = 40999999917
 let nextId = 1
+
+// 弹窗状态
+const dialogVisible = ref(false)
+// 表单验证规则
+const formOne = ref()
+// 地址表单验证规则
+const addressForm = ref<FormInstance[]>([])
 // 组件数据
 const formList1 = reactive<CustomerData>({
     id:0,
@@ -145,35 +153,15 @@ const formList1 = reactive<CustomerData>({
             contact: '',
             phone: '',
             region: '',
-            detailedAddress: ''
+            detailedAddress: '',
         }
     ] 
 })
-// 添加地址表单
-const addForm = () => {   
-    formList1.addresses.push({
-        id: nextId++,
-        address: '',
-        contact: '',
-        phone: '',
-        region: '',
-        detailedAddress: ''
-    })
-}
-// 弹窗状态
-const dialogVisible = ref(false);
-
-// 打开新增弹窗
-const open = () => {
-
-    dialogVisible.value = true;
-    clearForm()
-}
 // 动态弹窗标题
 const showTitle = computed(() => {
     return formList1.id === 0 ? '新增客户' : '编辑客户'
 })
- // 清空表单方法
+// 清空表单方法
 const clearForm = () => {
     formList1.id = 0
     formList1.attribute = ''
@@ -184,31 +172,45 @@ const clearForm = () => {
     formList1.abbreviation = ''
     formList1.remark = ''
     nextId = 1
-    formList1.addresses = [{
+    formList1.addresses = [
+        {
             id: nextId++,
             address: '',
             contact: '',
             phone: '',
             region: '',
             detailedAddress: ''
-        }]
+        }
+    ]
+}
+// 添加地址表单
+const addForm = () => {   
+    formList1.addresses.push({
+        id: nextId++,
+        address: '',
+        contact: '',
+        phone: '',
+        region: '',
+        detailedAddress: '',
+    })
+}
+// 打开新增弹窗
+const open = () => {
+    dialogVisible.value = true
+    clearForm()
 }
 // 打开编辑弹窗
 const openEdit = (data: CustomerData) => {
     Object.assign(formList1, data)
     dialogVisible.value = true
 }
-// 表单验证规则
-const formOne = ref()
-// 地址表单验证规则
-const addressForm = ref<FormInstance[]>([])
 // 自定义添加编辑事件
 const emit = defineEmits<{
      (e: 'addCustomer', data: CustomerData): void
      (e: 'editCustomer', data: CustomerData): void
 }>()
 // 确定按钮事件
-const handelSure = async () => {
+const handleSure = async () => {
     try {
         const validations = [
             formOne.value?.validate(),
@@ -216,14 +218,14 @@ const handelSure = async () => {
         ]
         await Promise.all(validations)
         if (formList1.id !== 0) { 
-        const editData = JSON.parse(JSON.stringify(formList1))
+            const editData = JSON.parse(JSON.stringify(formList1))
             emit('editCustomer', editData)
             ElMessage.success('编辑成功')
         } else {
-        const newData = JSON.parse(JSON.stringify(formList1))
+            const newData = JSON.parse(JSON.stringify(formList1))
             newData.id = nextId1++   
             newData.coding = coding++ 
-            emit('addCustomer',newData)
+            emit('addCustomer', newData)
             // console.log(formList1);
             ElMessage.success('添加成功')
         }

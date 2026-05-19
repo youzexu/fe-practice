@@ -1,7 +1,7 @@
 <template>
   <div class="top-bar">
    <div class="leftSide">
-      <img class="icons" src="../../icons/水果.svg">
+     <img class="icons" src="@/icons/水果.svg">
       <span>水果产业供应链SaaS平台</span>
      <el-divider direction="vertical" />
       <span>重庆一仓-生产系统</span>
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="language-item">
-      <img class="icons2" src="../../icons/多语言.svg">
+     <img class="icons2" src="@/icons/多语言.svg">
       <span class="lang">中文</span>
       <el-divider direction="vertical" />
       <span class="userName">用户名</span>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts" name="topBar">
-import { useAppStore }from '../../stores/app'
+import { useAppStore }from '@/stores/app'
 import { Fold, Expand } from '@element-plus/icons-vue'
 
 const appStore = useAppStore()

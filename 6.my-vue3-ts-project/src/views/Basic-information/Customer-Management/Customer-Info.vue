@@ -57,7 +57,7 @@
             </el-table>
            <!-- 分页 -->
             <el-row type="flex" justify="end" align="middle" style="margin-top: 16px;">
-                <el-pagination :locale="zhCn" v-model:current-page="currentPage" v-model:page-size="pageSize"
+               <el-pagination :locale="zhCn" v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[1, 2, 5, 10]" :total="total" size="small" background
                     layout="total, sizes, prev, pager, next, jumper" @current-change="handlePageChange"
                     @size-change="handleSizeChange" />
@@ -105,9 +105,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import AddCustomer from './components/add-customer.vue'
 import { onMounted, reactive, ref } from 'vue';
 // 调用分页
-onMounted(() => {
-    onSubmit()
-})
+onMounted(() => onSubmit())
 // 规范化数据接口
 interface CustomerData1 {
     id: number
@@ -128,7 +126,7 @@ interface CustomerData1 {
         detailedAddress: string
     }[]
 }
-// 规范表格数据
+
 // 定义表格数据
 const tableData = ref( [
     {
@@ -306,6 +304,25 @@ const tableData = ref( [
         ]
   },
 ])
+// 定义表格数据
+const currentAddresses = ref<{
+    id: number
+    address: string
+    contact: string
+    phone: string
+    region: string
+    detailedAddress: string
+}[]>([])
+// 总数
+const total = ref(0) 
+// 当前页码
+const currentPage = ref(1)  
+// 每页条数
+const pageSize = ref(5)   
+// 当前页显示的数据
+const showDialog = ref(false)
+// 定义子组件
+const subinStance = ref()
 // 定义查询数据
 const formInline = reactive({
   attribute: '',
@@ -314,24 +331,9 @@ const formInline = reactive({
   name: '',
   abbreviation: '',
 })
-// 定义表格数据
-const currentAddresses = ref<{
-    id: number;
-    address: string;
-    contact: string;
-    phone: string;
-    region: string;
-    detailedAddress: string
-}[]>([])
-// 定义弹窗
-const total = ref(0) // 总数
-const currentPage = ref(1)  // 当前页码
-const pageSize = ref(5)    // 每页条数
+// 保存原始数据
+const originTableData = ref<CustomerData1[]>([...tableData.value])
 
-// 当前页显示的数据
-const showDialog = ref(false)
-// 定义子组件
-const subinStance = ref()
 // 重置表单
 const reset = () => { 
     Object.assign(formInline, {
@@ -345,18 +347,9 @@ const reset = () => {
     currentPage.value = 1
     onSubmit()
 }
-// 打开查询地址表单
-const viewAddress = (row:CustomerData1) => {
-    currentAddresses.value = row.addresses
-    showDialog.value = true
-}
 // 调用子组件新增
 const addCustomer = () => {
     subinStance.value.open()
-}
-// 子组件编辑
-const Edit = (row:CustomerData1) => {
-    subinStance.value.openEdit(row)
 }
 // 新增
 const handleAddData = (data: CustomerData1) => {
@@ -365,8 +358,23 @@ const handleAddData = (data: CustomerData1) => {
     originTableData.value.unshift(data)
     onSubmit()
 }
-// 保存原始数据
-const originTableData = ref<CustomerData1[]>([...tableData.value])
+// 子组件编辑
+const Edit = (row:CustomerData1) => {
+    subinStance.value.openEdit(row)
+}
+// 编辑
+const handleEditData = (data: CustomerData1) => {
+    const index = tableData.value.findIndex(item => item.id === data.id)
+    if (index !== -1) {
+        tableData.value[index] = { ...tableData.value[index], ...data }
+    }
+    // console.log(data);
+}
+// 打开查询地址表单
+const viewAddress = (row:CustomerData1) => {
+    currentAddresses.value = row.addresses
+    showDialog.value = true
+}
 // 查询表单
 const onSubmit = () => {
     // 筛选数据
@@ -378,10 +386,8 @@ const onSubmit = () => {
         if (formInline.abbreviation && !item.abbreviation.includes(formInline.abbreviation)) return false
         return true
     })
-    
     // 更新总数
-    total.value = filtered.length
-    
+    total.value = filtered.length 
     // 分页
     const start = (currentPage.value - 1) * pageSize.value
     tableData.value = filtered.slice(start, start + pageSize.value)
@@ -392,20 +398,12 @@ const handleSizeChange = (size: number) => {
     currentPage.value = 1
     onSubmit()
 }
-
 // 分页切换
 const handlePageChange = (page: number) => {
     currentPage.value = page
     onSubmit()
 }
-// 编辑
-const handleEditData = (data: CustomerData1) => {
-    const index = tableData.value.findIndex(item => item.id === data.id)
-    if (index !== -1) {
-        tableData.value[index] = { ...tableData.value[index], ...data }
-    }
-    // console.log(data);
-}
+
 // 导出数据
 const exportData = () => { 
     console.log(tableData.value);

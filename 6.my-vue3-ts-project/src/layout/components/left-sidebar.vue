@@ -3,7 +3,7 @@
     <el-menu router :default-active="$route.path" :collapse="appStore.sidebarCollapsed" background-color="transparent"
       text-color="#bfcbd9" active-text-color="#409eff">
      <template v-for="item in menuList" :key="item.path">
-        <el-sub-menu v-if="item.children && item.children?.length" :index="item.path">
+       <el-sub-menu v-if="item.children?.length" :index="item.path">
           <template #title>
             <el-icon>
               <location />
@@ -27,15 +27,15 @@
 </template>
 
 <script lang="ts" setup name="leftSidebar">
-import { useAppStore } from '@/stores/app';
-import router from '@/router';
-import { computed } from 'vue';
+import { useAppStore } from '@/stores/app'
+import router from '@/router'
+import { computed } from 'vue'
 
 const appStore = useAppStore();
 
 // 获取路由中菜单列表
 const menuList = computed(() => {
-  const routes = router.getRoutes();
+  const routes = router.getRoutes()
   const layoutRoute = routes.find(route => route.path === '/')
   if (!layoutRoute?.children) return []
   return layoutRoute.children.filter(route => route.meta?.title)
@@ -67,23 +67,6 @@ const menuList = computed(() => {
 .sidebar.collapse :deep(.el-menu-item span),
 .sidebar.collapse :deep(.el-sub-menu__title span) {
   display: none;
-}
-
-.fold {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 16px;
-  cursor: pointer;
-  color: #bfcbd9;
-  border-bottom: 1px solid #3a4a5c;
-  margin-bottom: 8px;
-}
-
-.fold:hover {
-  color: #409eff;
-  background: #1a1f26;
 }
 
 .sidebar::-webkit-scrollbar {

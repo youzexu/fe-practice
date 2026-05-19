@@ -64,25 +64,25 @@ import { computed, reactive, ref } from 'vue';
 
 // 定义接口
 interface CustomerData {
-    id: number;
-    coding: number;
-    attribute: string;
-    type: string;
-    organization: string;
-    name: string;
-    abbreviation: string;
-    phone: string;
-    remark: string;
-    address: string;
-    house: string;
+    id: number
+    coding: number
+    attribute: string
+    type: string
+    organization: string
+    name: string
+    abbreviation: string
+    phone: string
+    remark: string
+    address: string
+    house: string
 }
 
 let id =21342414123
 let coding = 40999999917
-const formOne = ref();
-const showTitle = computed(() => {
-    return formList1.id !== 0 ? '编辑供应商' : '新增供应商'
- })
+
+const formOne = ref()
+// 弹窗状态
+const showHide = ref<boolean>(false)
 // 新增表单数据
 const formList1 = reactive<CustomerData>({ 
     id:id++,
@@ -96,7 +96,11 @@ const formList1 = reactive<CustomerData>({
     remark: '',
     address:'' ,
     house:'',
-});
+})
+// 弹窗标题
+const showTitle = computed(() => {
+    return formList1.id !== 0 ? '编辑供应商' : '新增供应商'
+ })
 // 清空表单数据
 const clearForm = () => { 
     formList1.id = 0
@@ -111,19 +115,17 @@ const clearForm = () => {
     formList1.address = ''
     formList1.house = ''
 }
-// 弹窗状态
-const showHide = ref<boolean>(false)
+// 父组件打开新增弹窗
+const open = () => { 
+    clearForm()
+    showHide.value = true
+}
 // 打开编辑弹窗
 const openEdit = (data: CustomerData) => { 
     Object.assign(formList1, data)
     showHide.value = true
 // console.log(data)
 } 
-// 父组件打开弹窗
-const open = () => { 
-    clearForm()
-    showHide.value = true
-}
 // 传递表单数据
 const emit = defineEmits<{
      (e: 'addCustomer', data: CustomerData): void
@@ -136,9 +138,9 @@ const handleSure = () => {
             if (formList1.id === 0) {
                 const submitData = JSON.parse(JSON.stringify(formList1)) 
                 submitData.id = id++
-            emit('addCustomer', submitData)
-            // console.log(submitData)
-            showHide.value = false
+                emit('addCustomer', submitData)
+                // console.log(submitData)
+                showHide.value = false
                 ElMessage.success('添加成功')
             }
             else {
@@ -149,11 +151,11 @@ const handleSure = () => {
                 ElMessage.success('编辑成功')              
              }
         } else { 
-             ElMessage.error('请填写完整信息')
+            ElMessage.error('请填写完整信息')
         }
     })
 }
-// 弹窗取消
+// 表单取消
 const handleCancel = () => { 
     showHide.value = false
     formOne.value.resetFields()
@@ -166,12 +168,12 @@ const rules = reactive({
     name: [{ required: true, message: '请输入供应商名称', trigger: 'blur' }],
     abbreviation: [{ required: true, message: '请输入供应商简称', trigger: 'blur' }],
     coding: [{ required: true, message: '请输入供应商财务编码', trigger: 'blur' }],
+    address: [{ required: true, message: '请输入供应商地址', trigger: 'blur' }],
     phone: [
         { required: true, message: '请输入联系人电话', trigger: 'blur' },
         {  pattern: /^1[3-9]\d{9}$/, message: '电话格式不正确', trigger: 'blur' },
         { min: 11, max: 11, message: '请输入11位手机号码', trigger: 'blur' }
     ],
-    address: [{ required: true, message: '请输入供应商地址', trigger: 'blur' }],
     house: [
         { required: true, message: '请输入门牌号', trigger: 'blur' },
         { max: 50, message: '门牌号不能超过50字', trigger: 'blur' }
@@ -183,7 +185,6 @@ const rules = reactive({
 })
 
 defineExpose({open, openEdit})
-
 </script>
 
 <style scoped>

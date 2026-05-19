@@ -88,6 +88,26 @@
 import AddSupplier from './components/add-supplier.vue';
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { ref, reactive, onMounted } from 'vue';
+
+// 定义接口
+interface CustomerData1 {
+    id: number
+    coding: number
+    attribute: string
+    type: string
+    organization: string
+    name: string
+    abbreviation: string
+    phone: string
+    remark: string
+    address: string
+    house: string
+}
+interface AddressData { 
+    address: string
+    house: string
+}
+
 // 供应商列表数据
 const tableData = ref([
     {
@@ -170,30 +190,20 @@ const tableData = ref([
         address: '南京',
   },
 ])
-// 定义接口
-interface CustomerData1 {
-    id: number,
-coding: number,
-attribute: string,
-type: string,
-organization: string,
-name: string,
-abbreviation: string,
-phone: string,
-remark: string,
-address: string,
-house: string,
-}
-interface AddressData { 
-address: string,
-house: string,
-}
+// 当前选中地址
 const currentAddresses = ref<AddressData>()
-
-const subinStance = ref() // 子组件实例
-const total = ref(0) // 总数
-const currentPage = ref(1)  // 当前页码
-const pageSize = ref(5)    // 每页条数
+// 子组件实例
+const subinStance = ref() 
+// 总数
+const total = ref(0) 
+// 当前页码
+const currentPage = ref(1)  
+// 每页条数
+const pageSize = ref(5)   
+// 配送地址弹窗
+const showDialog = ref(false)
+// 保存原始数据
+const originTableData = ref<CustomerData1[]>([...tableData.value])
 // 查询表单
 const formInline = reactive({
   attribute: '',
@@ -201,10 +211,7 @@ const formInline = reactive({
   name: '',
   abbreviation: '',
 })
-// 配送地址弹窗
-const showDialog = ref(false)
 
-// 调用分页
 onMounted(() => {
     onSubmit()
 })
@@ -220,11 +227,20 @@ const reset = () => {
     currentPage.value = 1
     onSubmit()
 }
+// 新增供应商弹窗
+const addCustomer = () => {
+   subinStance.value.open()
+ }
 // 新增供应商
 const handleAddData = (data: CustomerData1) => { 
     console.log(data)
     originTableData.value.unshift(data)
     onSubmit()
+}
+// 编辑供应商弹窗
+const Edit = (row: AddressData) => { 
+    subinStance.value.openEdit(row)
+    // console.log(row)
 }
 // 编辑供应商
 const handleEditData = (data: CustomerData1) => {
@@ -235,29 +251,16 @@ const handleEditData = (data: CustomerData1) => {
     }
     onSubmit()
 }
-// 导出数据
-const exportData = () => { }
-// 新增供应商弹窗
-const addCustomer = () => {
-   subinStance.value.open()
- }
 // 查看地址
 const viewAddress = (row: CustomerData1) => {
     currentAddresses.value = {
         address : row.address,
-        house : row.house
+        house : row.house,
     }
     // console.log(row.address)
     // console.log(currentAddresses.value)
     showDialog.value = true
 }
- // 打开编辑弹窗
-const Edit = (row: AddressData) => { 
-    subinStance.value.openEdit(row)
-    // console.log(row)
-}
-// 保存原始数据
-const originTableData = ref<CustomerData1[]>([...tableData.value])
 // 查询表单
 const onSubmit = () => {
     // 筛选数据
@@ -268,10 +271,8 @@ const onSubmit = () => {
         if (formInline.abbreviation && !item.abbreviation.includes(formInline.abbreviation)) return false
         return true
     })
-    
     // 更新总数
-    total.value = filtered.length
-    
+    total.value = filtered.length 
     // 分页
     const start = (currentPage.value - 1) * pageSize.value
     tableData.value = filtered.slice(start, start + pageSize.value)
@@ -286,6 +287,10 @@ const handleSizeChange = (size: number) => {
 const handlePageChange = (page: number) => {
     currentPage.value = page
     onSubmit()
+}
+// 导出数据
+const exportData = () => {
+    console.log();
 }
 
 </script>
