@@ -8,14 +8,12 @@ interface AppState {
 
 export const useAppStore = defineStore('app', {
     state: (): AppState => ({
-        // 从 localStorage 读取初始值
-        sidebarCollapsed: localStorage.getItem('sidebar-collapsed') === 'true'
+        sidebarCollapsed: false 
     }),
-    // 切换侧边栏状态
-    actions: {      
+
+    actions: {
         toggleSidebar() {
-            this.sidebarCollapsed = !this.sidebarCollapsed         
-            localStorage.setItem('sidebar-collapsed', String(this.sidebarCollapsed))
+            this.sidebarCollapsed = !this.sidebarCollapsed
         },
     }
 })
