@@ -29,7 +29,7 @@
                <el-input v-model="formInline.abbreviation" placeholder="请输入" clearable style="width: 263px;" />
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+               <el-button type="primary" @click="onSubmit">查询</el-button>
             </el-form-item>
             <el-form-item>
                <el-button @click="reset">重置</el-button>
@@ -50,13 +50,13 @@
                 <el-table-column prop="remark" label="备注" min-width="180" show-overflow-tooltip />
                 <el-table-column prop="address" label="操作" min-width="228">
                     <template v-slot="{ row }">
-                        <el-button link type="primary" size="small" @click="viewAddress(row)">查看配送地址</el-button>
-                        <el-button link type="primary" size="small" @click="Edit(row)">编辑</el-button>
+                       <el-button link type="primary" size="small" @click="viewAddress(row)">查看配送地址</el-button>
+                       <el-button link type="primary" size="small" @click="edit(row)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
            <!-- 分页 -->
-            <el-row type="flex" justify="end" align="middle" style="margin-top: 16px;">
+           <el-row type="flex" justify="end" align="middle" style="margin-top: 16px;">
                <el-pagination :locale="zhCn" v-model:current-page="currentPage" v-model:page-size="pageSize"
                     :page-sizes="[1, 2, 5, 10]" :total="total" size="small" background
                     layout="total, sizes, prev, pager, next, jumper" @current-change="handlePageChange"
@@ -96,20 +96,20 @@
         </el-dialog>
     </div>
     <!-- 添加客户 -->
-   <Add-customer ref="subinStance" @addCustomer="handleAddData" @editCustomer="handleEditData" />
+   <Add-customer ref="subInstance" @addCustomer="handleAddData" @editCustomer="handleEditData" />
 </template>
 
 
 <script setup lang="ts" name="customerInfo">
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import AddCustomer from './components/add-customer.vue'
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue'
 // 调用分页
 onMounted(() => onSubmit())
 // 规范化数据接口
-interface CustomerData1 {
+interface CustomerData {
     id: number
-    coding:number
+    coding: number
     attribute: string
     type: string
     group: string
@@ -128,9 +128,9 @@ interface CustomerData1 {
 }
 
 // 定义表格数据
-const tableData = ref( [
+const tableData = ref([
     {
-    id:2103972301201,
+    id: 2103972301201,
     coding: 40999999911,
     attribute: '外部',
     group: '商超',
@@ -141,7 +141,7 @@ const tableData = ref( [
     abbreviation: '加剋夫',
             addresses: [
                 {
-                id:2103972001,
+                id: 2103972001,
                 address: '美团一仓',
                 contact: '杨丽',
                 phone: '13251175885',
@@ -149,7 +149,7 @@ const tableData = ref( [
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
                 {
-                 id:2103972002,
+                 id: 2103972002,
                 address: '美团二仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -157,7 +157,7 @@ const tableData = ref( [
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
                 },
             {
-                 id:2103972013,
+                 id: 2103972013,
                 address: '美团十三仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -167,7 +167,7 @@ const tableData = ref( [
         ]
   },
     {
-    id:2103972301202,
+    id: 2103972301202,
     coding: 40999999912,
     attribute: '外部',
     group: '上群',
@@ -178,7 +178,7 @@ const tableData = ref( [
         abbreviation: '好又多',
              addresses: [
                  {
-                 id:2103972003,
+                 id: 2103972003,
                 address: '美团三仓',
                 contact: '帅哥',
                 phone: '13251175885',
@@ -188,7 +188,7 @@ const tableData = ref( [
         ]
   },
     {
-    id:2103972301203,
+    id: 2103972301203,
     coding: 40999999913,
     attribute: '内部',
     group: '社群',
@@ -199,7 +199,7 @@ const tableData = ref( [
         abbreviation: '中百大潮',
             addresses: [
                 {
-                 id:2103972004,
+                 id: 2103972004,
                 address: '美团五仓',
                 contact: '杨丽',
                 phone: '13251175885',
@@ -207,7 +207,7 @@ const tableData = ref( [
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
                 {
-                 id:2103972005,
+                 id: 2103972005,
                 address: '美团六仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -217,7 +217,7 @@ const tableData = ref( [
         ]
   },
     {
-    id:2103972301204,
+    id: 2103972301204,
     coding: 40999999914,
     attribute: '内部',
     group: '团建',
@@ -228,7 +228,7 @@ const tableData = ref( [
         abbreviation: '加号团建',
         addresses: [
             {
-                 id:2103972006,
+                 id: 2103972006,
                 address: '美团七仓',
                 contact: '杨丽',
                 phone: '13251175885',
@@ -236,7 +236,7 @@ const tableData = ref( [
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
             {
-                 id:2103972007,
+                 id: 2103972007,
                 address: '美团八仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -246,7 +246,7 @@ const tableData = ref( [
         ]
   },
     {
-    id:2103972301205,
+    id: 2103972301205,
     coding: 40999999915,
     attribute: '内部',
     group: '社群',
@@ -257,7 +257,7 @@ const tableData = ref( [
         abbreviation: '中百大潮',
              addresses: [
                  {
-                 id:2103972008,
+                 id: 2103972008,
                 address: '美团九仓',
                 contact: '杨丽',
                 phone: '13251175885',
@@ -265,7 +265,7 @@ const tableData = ref( [
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
                  {
-                 id:2103972009,
+                 id: 2103972009,
                 address: '美团十仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -286,7 +286,7 @@ const tableData = ref( [
         abbreviation: '中百大潮',
              addresses: [
                  {
-                 id:2103972010,
+                 id: 2103972010,
                 address: '美团十一仓',
                 contact: '杨丽',
                 phone: '13251175885',
@@ -294,7 +294,7 @@ const tableData = ref( [
                 detailedAddress: '重庆市渝北区东湖南路3号中铁峰汇B座22楼'
             },
                  {
-                 id:2103972011,
+                 id: 2103972011,
                 address: '美团十二仓',
                 contact: '嘉豪',
                 phone: '1532478232',
@@ -322,7 +322,7 @@ const pageSize = ref(5)
 // 当前页显示的数据
 const showDialog = ref(false)
 // 定义子组件
-const subinStance = ref()
+const subInstance = ref()
 // 定义查询数据
 const formInline = reactive({
   attribute: '',
@@ -332,7 +332,7 @@ const formInline = reactive({
   abbreviation: '',
 })
 // 保存原始数据
-const originTableData = ref<CustomerData1[]>([...tableData.value])
+const originTableData = ref<CustomerData[]>([...tableData.value])
 
 // 重置表单
 const reset = () => { 
@@ -349,29 +349,29 @@ const reset = () => {
 }
 // 调用子组件新增
 const addCustomer = () => {
-    subinStance.value.open()
+    subInstance.value.open()
 }
 // 新增
-const handleAddData = (data: CustomerData1) => {
+const handleAddData = (data: CustomerData) => {
     // console.log(data);
     // tableData.value.unshift(data)
     originTableData.value.unshift(data)
     onSubmit()
 }
 // 子组件编辑
-const Edit = (row:CustomerData1) => {
-    subinStance.value.openEdit(row)
+const edit = (row:CustomerData) => {
+    subInstance.value.openEdit(row)
 }
 // 编辑
-const handleEditData = (data: CustomerData1) => {
-    const index = tableData.value.findIndex(item => item.id === data.id)
-    if (index !== -1) {
-        tableData.value[index] = { ...tableData.value[index], ...data }
+const handleEditData = (data: CustomerData) => {
+    const originIndex = originTableData.value.findIndex(item => item.id === data.id)
+    if (originIndex !== -1) {
+        originTableData.value[originIndex] = { ...originTableData.value[originIndex], ...data }
     }
-    // console.log(data);
+    onSubmit()
 }
 // 打开查询地址表单
-const viewAddress = (row:CustomerData1) => {
+const viewAddress = (row:CustomerData) => {
     currentAddresses.value = row.addresses
     showDialog.value = true
 }
@@ -406,7 +406,7 @@ const handlePageChange = (page: number) => {
 
 // 导出数据
 const exportData = () => { 
-    console.log(tableData.value);
+    console.log(originTableData.value);
 }
 </script>
 
@@ -430,8 +430,9 @@ const exportData = () => {
     margin-right: 24px;
     flex: 1;
     overflow-x: auto;
-        overflow-y: auto;
-        min-height: 0;
+    overflow-y: auto;
+        
+    min-height: 0;
 }
 
 .btn-export {
@@ -466,7 +467,7 @@ const exportData = () => {
     font-weight: 500;
     line-height: 20px;
     letter-spacing: 0px;
-    color: black
+    color: black;
 }
 
 .Contact {

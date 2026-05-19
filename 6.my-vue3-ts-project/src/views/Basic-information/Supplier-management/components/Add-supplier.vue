@@ -1,7 +1,7 @@
 <template>
     <div>
        <el-dialog v-model="showHide" :title="showTitle" width="520" @close="handleCancel">
-            <el-divider style="margin-top: 10px; margin-bottom: 24xp;" />
+           <el-divider style="margin-top: 10px; margin-bottom: 24px;" />
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
                 ref="formOne" :rules="rules">
                <el-form-item :label="formList1.id !== 0 ? `供应商属性: ${formList1.attribute}供应商` : '供应商属性'"
@@ -59,8 +59,8 @@
 </template>
 
 <script setup lang="ts" name="addSupplier">
-import { ElMessage } from 'element-plus';
-import { computed, reactive, ref } from 'vue';
+import { ElMessage } from 'element-plus'
+import { computed, reactive, ref } from 'vue'
 
 // 定义接口
 interface CustomerData {
@@ -77,7 +77,7 @@ interface CustomerData {
     house: string
 }
 
-let id =21342414123
+let id = 21342414123
 let coding = 40999999917
 
 const formOne = ref()
@@ -85,7 +85,7 @@ const formOne = ref()
 const showHide = ref<boolean>(false)
 // 新增表单数据
 const formList1 = reactive<CustomerData>({ 
-    id:id++,
+    id: id++,
     coding: coding++,
     attribute: '',
     type: '',
@@ -94,8 +94,8 @@ const formList1 = reactive<CustomerData>({
     phone: '',
     abbreviation: '',
     remark: '',
-    address:'' ,
-    house:'',
+    address: '',
+    house: '',
 })
 // 弹窗标题
 const showTitle = computed(() => {
@@ -145,7 +145,7 @@ const handleSure = () => {
             }
             else {
                 const editData = JSON.parse(JSON.stringify(formList1)) 
-                emit('editCustomer',editData)
+                emit('editCustomer', editData)
                 // console.log(editData)
                 showHide.value = false
                 ElMessage.success('编辑成功')              
@@ -188,20 +188,5 @@ defineExpose({open, openEdit})
 </script>
 
 <style scoped>
-.harvestinformation {
-    margin-top: 24px;
-    font-family: Microsoft YaHei;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    letter-spacing: 0px;
-    color: black;
-    margin-bottom: 8px;
-}
 
-.span1 {
-    color: #0065FE;
-    font-weight: 900;
-    font-size: 18px;
-}
 </style>

@@ -3,7 +3,7 @@
        <el-dialog v-model="dialogVisible" :title="showTitle" width="520" @close="handleCancel">
             <el-divider style="margin-top: 10px; margin-bottom: 24px;" />
             <el-form label-width="120px" label-position="top" style="min-height: 600px;" :model="formList1"
-                ref="formOne" :rules="rules">
+               ref="customerForm" :rules="rules">
                <el-form-item :label="formList1.id !== 0 ? `客户属性: ${formList1.attribute}` : '客户属性'"
                     style="width: 100%;margin-bottom: 24px;" size="small" prop="attribute">
                     <el-select v-if="formList1.id === 0" placeholder="请选择" v-model="formList1.attribute">
@@ -52,7 +52,7 @@
                 <span>收货信息</span>
             </div>
            <div v-for="(addresses, index) in formList1.addresses" :key="addresses.id">
-                <el-form label-position="top" style="min-height: 500px;" :model="addresses" ref="addressForm"
+               <el-form label-position="top" style="min-height: 500px;" :model="addresses" ref="addressForms"
                     :rules="rules">
                    <div style="display: flex; justify-content: flex-end;" v-if="formList1.addresses.length > 1">
                         <el-button @click="formList1.addresses.splice(index, 1)" link type="danger"
@@ -91,7 +91,7 @@
             </el-row>
            <el-divider style="margin: 24px 0 8px 0" />
             <el-row type="flex" justify="end" align="middle">
-               <el-button type="primary" size="small" @click="handleSure">确定</el-button>
+               <el-button type="primary" size="small" @click="handleConfirm">确定</el-button>
                 <el-button size="small" @click="handleCancel">取消</el-button>
             </el-row>
         </el-dialog>
@@ -100,7 +100,7 @@
 
 
 <script setup lang="ts" name="addCustomer">
-import { ref, reactive, computed, } from 'vue';
+import { ref, reactive, computed } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 // 规范数据
@@ -125,22 +125,22 @@ interface CustomerData {
 }
 
 // 全局变量
-let nextId1 = 2103972301206
-let coding = 40999999917
-let nextId = 1
+let nextCustomerId = 2103972301206
+let nextCoding = 40999999917
+let nextAddressId = 1
 
 // 弹窗状态
 const dialogVisible = ref(false)
 // 表单验证规则
-const formOne = ref()
+const customerForm = ref()
 // 地址表单验证规则
-const addressForm = ref<FormInstance[]>([])
+const addressForms = ref<FormInstance[]>([])
 // 组件数据
 const formList1 = reactive<CustomerData>({
-    id:0,
+    id: 0,
     attribute: '',
     type: '',
-    coding: coding++,
+    coding: nextCoding++,
     group: '',
     organization: '',
     name: '',
@@ -148,7 +148,7 @@ const formList1 = reactive<CustomerData>({
     remark: '',
     addresses: [
         {
-            id: nextId++,
+            id: nextAddressId++,
             address: '',
             contact: '',
             phone: '',
@@ -171,10 +171,10 @@ const clearForm = () => {
     formList1.name = ''
     formList1.abbreviation = ''
     formList1.remark = ''
-    nextId = 1
+    nextAddressId = 1
     formList1.addresses = [
         {
-            id: nextId++,
+            id: nextAddressId++,
             address: '',
             contact: '',
             phone: '',
@@ -186,7 +186,7 @@ const clearForm = () => {
 // 添加地址表单
 const addForm = () => {   
     formList1.addresses.push({
-        id: nextId++,
+        id: nextAddressId++,
         address: '',
         contact: '',
         phone: '',
@@ -210,11 +210,11 @@ const emit = defineEmits<{
      (e: 'editCustomer', data: CustomerData): void
 }>()
 // 确定按钮事件
-const handleSure = async () => {
+const handleConfirm = async () => {
     try {
         const validations = [
-            formOne.value?.validate(),
-            ...addressForm.value.map(form => form?.validate())
+            customerForm.value?.validate(),
+            ...addressForms.value.map(form => form?.validate())
         ]
         await Promise.all(validations)
         if (formList1.id !== 0) { 
@@ -223,8 +223,8 @@ const handleSure = async () => {
             ElMessage.success('编辑成功')
         } else {
             const newData = JSON.parse(JSON.stringify(formList1))
-            newData.id = nextId1++   
-            newData.coding = coding++ 
+            newData.id = nextCustomerId++ 
+            newData.coding = nextCoding++ 
             emit('addCustomer', newData)
             // console.log(formList1);
             ElMessage.success('添加成功')
@@ -237,10 +237,10 @@ const handleSure = async () => {
 // 取消按钮事件
 const handleCancel = () => {
     if (formList1.id !== 0) {
-        formOne.value?.clearValidate()
+       customerForm.value?.clearValidate()
     } else {
-        formOne.value?.resetFields()
-        addressForm.value.forEach(form => form?.resetFields())
+        customerForm.value?.resetFields()
+        addressForms.value.forEach(form => form?.resetFields())
         clearForm()
     }
     dialogVisible.value = false
@@ -257,7 +257,7 @@ const rules = reactive({
         { required: true, message: '请选择客户分组', trigger: 'blur' }
     ],
     coding: [
-        {required: true, message: '请填写客户编码', trigger: 'blur' }
+        { required: true, message: '请填写客户编码', trigger: 'blur' }
     ],
     organization: [
         { required: true, message: '请选择客户所属组织', trigger: 'blur' }

@@ -47,7 +47,7 @@
                <el-table-column label="操作" min-width="228">
                     <template v-slot="{ row }">
                         <el-button link type="primary" size="small" @click="viewAddress(row)">查看配送地址</el-button>
-                        <el-button link type="primary" size="small" @click="Edit(row)">编辑</el-button>
+                       <el-button link type="primary" size="small" @click="edit(row)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -80,17 +80,17 @@
             </el-row>
         </el-dialog>
     </div>
-   <Add-supplier ref="subinStance" @addCustomer="handleAddData" @editCustomer="handleEditData" />
+   <Add-supplier ref="subInstance" @addCustomer="handleAddData" @editCustomer="handleEditData" />
 </template>
 
 
 <script setup lang="ts" name="supplierInfo">
-import AddSupplier from './components/add-supplier.vue';
+import AddSupplier from './components/add-supplier.vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue'
 
 // 定义接口
-interface CustomerData1 {
+interface CustomerData {
     id: number
     coding: number
     attribute: string
@@ -111,7 +111,7 @@ interface AddressData {
 // 供应商列表数据
 const tableData = ref([
     {
-        id:12412414111,
+        id: 12412414111,
         coding: 123456789,
         attribute: '外部',
         type: '水果',
@@ -122,10 +122,9 @@ const tableData = ref([
         remark: '我带我活动i啊我都i啊我活动kkkk',
         house: '美国',
         address: '美团一仓',
-
     },
     {
-          id:12412414112,
+        id: 12412414112,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -138,7 +137,7 @@ const tableData = ref([
         address: '重庆',
     },
     {
-          id:12412414113,
+        id: 12412414113,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -151,7 +150,7 @@ const tableData = ref([
         address: '北京',
     },
     {
-          id:12412414114,
+        id: 12412414114,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -164,7 +163,7 @@ const tableData = ref([
         address: '上海',
     },
     {
-          id:12412414115,
+        id: 12412414115,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -177,7 +176,7 @@ const tableData = ref([
         address: '广州',
     },
     {
-          id:12412414116,
+        id: 12412414116,
         coding: 123456789,
         attribute: '外部',
         type: '公司',
@@ -188,12 +187,12 @@ const tableData = ref([
         remark: '我带我活动i啊我都i啊我活动kkkk',
         house: '15栋',
         address: '南京',
-  },
+    },
 ])
 // 当前选中地址
 const currentAddresses = ref<AddressData>()
 // 子组件实例
-const subinStance = ref() 
+const subInstance = ref() 
 // 总数
 const total = ref(0) 
 // 当前页码
@@ -203,7 +202,7 @@ const pageSize = ref(5)
 // 配送地址弹窗
 const showDialog = ref(false)
 // 保存原始数据
-const originTableData = ref<CustomerData1[]>([...tableData.value])
+const originTableData = ref<CustomerData[]>([...tableData.value])
 // 查询表单
 const formInline = reactive({
   attribute: '',
@@ -229,33 +228,33 @@ const reset = () => {
 }
 // 新增供应商弹窗
 const addCustomer = () => {
-   subinStance.value.open()
+   subInstance.value.open()
  }
 // 新增供应商
-const handleAddData = (data: CustomerData1) => { 
+const handleAddData = (data: CustomerData) => { 
     console.log(data)
     originTableData.value.unshift(data)
     onSubmit()
 }
 // 编辑供应商弹窗
-const Edit = (row: AddressData) => { 
-    subinStance.value.openEdit(row)
+const edit = (row: CustomerData) => { 
+    subInstance.value.openEdit(row)
     // console.log(row)
 }
 // 编辑供应商
-const handleEditData = (data: CustomerData1) => {
+const handleEditData = (data: CustomerData) => {
     // console.log(data)
-        const index = originTableData.value.findIndex(item => item.id === data.id)
+    const index = originTableData.value.findIndex(item => item.id === data.id)
     if (index !== -1) {
         originTableData.value[index] = { ...originTableData.value[index], ...data }
     }
     onSubmit()
 }
 // 查看地址
-const viewAddress = (row: CustomerData1) => {
+const viewAddress = (row: CustomerData) => {
     currentAddresses.value = {
-        address : row.address,
-        house : row.house,
+        address: row.address,
+        house: row.house,
     }
     // console.log(row.address)
     // console.log(currentAddresses.value)
@@ -290,7 +289,7 @@ const handlePageChange = (page: number) => {
 }
 // 导出数据
 const exportData = () => {
-    console.log();
+    console.log(tableData.value)
 }
 
 </script>
@@ -304,45 +303,40 @@ const exportData = () => {
 
 .bottom-menu {
     margin-top: 20px;
-    background: #FFFFFF;
+    background: #fff;
     height: 459px;
 }
 
 .btn-export {
     width: 60px;
     height: 32px;
-    margin-left: 24px;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin: 16px 10px 16px 24px;
 }
 
 .btn-add {
-    margin-right: 10px;
-    margin-top: 16px;
     width: 88px;
     height: 32px;
-    margin-bottom: 16px;
+    margin: 16px 10px 16px 0;
 }
 
 .bottom-menu1 {
-    height: 323px;
-    margin-bottom: 72px;
-    margin-left: 24px;
-    margin-right: 24px;
     flex: 1;
+    height: 323px;
+    min-height: 0;
+        margin: 0 24px 72px 24px;
     overflow-x: auto;
     overflow-y: auto;
-    min-height: 0;
 }
 
 .harvestinformation {
     margin-top: 24px;
-    font-family: Microsoft YaHei;
+    margin-bottom: 8px;
+        font-family: 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
-    letter-spacing: 0px;
-    color: black
+    letter-spacing: 0;
+        color: #000;
 }
 
 .Receivingaddress {
@@ -350,7 +344,7 @@ const exportData = () => {
 }
 
 .span1 {
-    color: #0065FE;
+    color: #0065fe;
     font-weight: 900;
     font-size: 18px;
 }
